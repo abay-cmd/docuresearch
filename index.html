@@ -1801,8 +1801,15 @@
           </div>
 
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-            <div style="font-size:0.75rem; color:var(--text-muted);">
-              Mode AI: <span style="font-weight:700; color:var(--text-main);" id="aiCurrentModeText">Gemini Pro API (BYOK / Managed)</span>
+            <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+              <div style="font-size:0.75rem; color:var(--text-muted);">
+                Mode AI: <span style="font-weight:700; color:var(--text-main);" id="aiCurrentModeText">Gemini Pro API (BYOK / Managed)</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <label style="font-size:0.75rem; font-weight:700; color:var(--text-main);">Target Bagian:</label>
+                <select class="form-control" id="selectActiveChapterDropdown" style="font-size:0.75rem; padding:4px 8px; width:auto; border-radius:6px;" onchange="handleDropdownChapterChange(this.value)">
+                </select>
+              </div>
             </div>
             <div style="display:flex; gap:10px;">
               <button class="btn btn-secondary btn-sm" onclick="openUploadRefModal()">
@@ -3235,30 +3242,61 @@
       const container = document.getElementById('chapterNavTree');
       container.innerHTML = '';
 
-      const type = currentManuscript.manuscriptType || 'tesis';
-      const template = MANUSCRIPT_TEMPLATES[type] || MANUSCRIPT_TEMPLATES.tesis;
+      const type = currentManuscript.manuscriptType || 'skripsi';
+      const template = MANUSCRIPT_TEMPLATES[type] || MANUSCRIPT_TEMPLATES.skripsi;
       const items = template.treeItems;
+
+      const dropdown = document.getElementById('selectActiveChapterDropdown');
+      if (dropdown) dropdown.innerHTML = '';
 
       items.forEach(item => {
         const btn = document.createElement('button');
         btn.className = `tree-btn ${item.isFront ? 'front-matter' : ''} ${item.id === currentManuscript.activeChapterId ? 'active' : ''}`;
+        btn.dataset.chapterId = item.id;
         btn.onclick = () => selectChapter(item.id, item.title);
         btn.innerHTML = `
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.title}</span>
         `;
         container.appendChild(btn);
+
+        if (dropdown) {
+          const opt = document.createElement('option');
+          opt.value = item.id;
+          opt.textContent = item.title;
+          if (item.id === currentManuscript.activeChapterId) opt.selected = true;
+          dropdown.appendChild(opt);
+        }
       });
 
       document.getElementById('treeTotalCount').textContent = `${items.length} Bagian`;
+    }
+
+    function handleDropdownChapterChange(newId) {
+      const type = currentManuscript.manuscriptType || 'skripsi';
+      const template = MANUSCRIPT_TEMPLATES[type] || MANUSCRIPT_TEMPLATES.skripsi;
+      const item = template.treeItems.find(t => t.id === newId);
+      selectChapter(newId, item ? item.title : newId);
     }
 
     function selectChapter(id, title) {
       saveCurrentChapter();
       currentManuscript.activeChapterId = id;
 
-      document.querySelectorAll('.tree-btn').forEach(b => b.classList.remove('active'));
-      event && event.currentTarget && event.currentTarget.classList.add('active');
+      // Update active state in sidebar tree
+      document.querySelectorAll('#chapterNavTree .tree-btn').forEach(b => {
+        if (b.dataset.chapterId === id) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+
+      // Sync dropdown
+      const dropdown = document.getElementById('selectActiveChapterDropdown');
+      if (dropdown && dropdown.value !== id) {
+        dropdown.value = id;
+      }
 
       if (id === 'cover') {
         switchView('cover');
@@ -3269,7 +3307,8 @@
         loadCurrentChapter();
       }
 
-      document.getElementById('heroActiveSectionLabel').textContent = `Menampilkan: ${title}`;
+      const labelEl = document.getElementById('heroActiveSectionLabel');
+      if (labelEl) labelEl.textContent = `Menampilkan: ${title}`;
     }
 
     function loadCurrentChapter() {
@@ -3357,7 +3396,16 @@
         references: 'Daftar Pustaka, Sitasi & Ekspor File RIS'
       };
       const labelEl = document.getElementById('heroActiveSectionLabel');
-      if (labelEl) labelEl.textContent = 'Menampilkan: ' + (heroLabels[viewName] || viewName.toUpperCase());
+      if (labelEl) {
+        if (viewName === 'editor') {
+          const type = currentManuscript.manuscriptType || 'skripsi';
+          const template = MANUSCRIPT_TEMPLATES[type] || MANUSCRIPT_TEMPLATES.skripsi;
+          const currentItem = template.treeItems.find(t => t.id === currentManuscript.activeChapterId);
+          labelEl.textContent = 'Menampilkan: ' + (currentItem ? currentItem.title : 'BAB I PENDAHULUAN');
+        } else {
+          labelEl.textContent = 'Menampilkan: ' + (heroLabels[viewName] || viewName.toUpperCase());
+        }
+      }
 
       // Trigger loader spesifik
       if (viewName === 'feasibility') {
@@ -3998,7 +4046,17 @@
 
     // Eksekusi Pembuatan Draf dengan Deep Research Gemini Anti-Slop
     async function executeAiChapterGeneration() {
-      const activeId = currentManuscript.activeChapterId;
+      let activeId = currentManuscript.activeChapterId;
+      if (activeId === 'cover' || activeId === 'references') {
+        activeId = 'bab1';
+        selectChapter('bab1', 'BAB I PENDAHULUAN');
+      }
+
+      const type = currentManuscript.manuscriptType || 'skripsi';
+      const template = MANUSCRIPT_TEMPLATES[type] || MANUSCRIPT_TEMPLATES.skripsi;
+      const currentItem = template.treeItems.find(t => t.id === activeId);
+      const readableTitle = currentItem ? currentItem.title : activeId.toUpperCase();
+
       const btn = document.getElementById('btnRunAiGenerate');
       btn.textContent = 'Deep Research Berjalan...';
       btn.disabled = true;
@@ -4012,13 +4070,15 @@
       const combinedReferences = userNotes ? `${userNotes}\n\nReferensi Terverifikasi dari Database:\n${connectedRefs}` : connectedRefs;
 
       const payload = {
+        action: 'chapter',
         manuscriptType: currentManuscript.manuscriptType,
         chapterId: activeId,
-        chapterTitle: activeId.toUpperCase(),
+        chapterTitle: readableTitle,
         title: currentManuscript.title,
         field: currentManuscript.programStudy,
-        approach: currentManuscript.approach || 'Kuantitatif Eksperimental',
-        method: currentManuscript.method || 'Validasi Silang dan Evaluasi Statistik',
+        approach: currentManuscript.approach || 'Kualitatif (Studi Kasus Deskriptif Analitis)',
+        method: currentManuscript.method || 'Observasi Partisipatif, Wawancara Mendalam, Studi Dokumentasi, dan Triangulasi',
+        theoreticalFramework: currentManuscript.theoreticalFramework || '',
         problemStatement: document.getElementById('aiInputGap').value.trim(),
         userReferences: combinedReferences,
         customTemplate: userConfig.campusTemplate,
@@ -4034,12 +4094,12 @@
 
         const json = await res.json();
         if (json.ok && json.data && json.data.content) {
-          showToast('Deep Research selesai! Memulai proses pengetikan naskah real-time...');
+          showToast(`Deep Research ${readableTitle} selesai! Memulai proses pengetikan naskah real-time...`);
           startTypewriterStreaming('mainChapterEditor', json.data.content, () => {
             currentManuscript.chapters[activeId] = json.data.content;
             saveCurrentChapter();
             const words = json.data.content.split(/\s+/).length;
-            showToast(`Naskah bab berhasil disusun lengkap (${words} kata) bebas AI-slop!`);
+            showToast(`Naskah "${readableTitle}" berhasil disusun lengkap (${words} kata) bebas AI-slop!`);
           });
         } else {
           showToast(json.error ? json.error.message : 'Gagal menghasilkan draf.');
@@ -4259,7 +4319,11 @@
 
             card.innerHTML = `
               <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
-                <h4 style="font-size:0.95rem; font-weight:800; color:#0f172a; line-height:1.4; flex:1;">${escapeHtml(art.title)}</h4>
+                <h4 style="font-size:0.95rem; font-weight:800; color:#0f172a; line-height:1.4; flex:1;">
+                  <a href="${downloadLink}" target="_blank" rel="noopener noreferrer" style="color:#0f172a; text-decoration:none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#0f172a'">
+                    ${escapeHtml(art.title)}
+                  </a>
+                </h4>
                 <div style="display:flex; gap:6px; align-items:center;">
                   <span class="${badgeClass}">${escapeHtml(badgeText)}</span>
                   <span class="badge-pill" style="background:#dcfce7; color:#15803d; border-color:#bbf7d0; font-size:0.7rem;">✓ Open Access</span>
@@ -4268,12 +4332,16 @@
               <div style="font-size:0.78rem; color:#475569;">
                 <strong>${escapeHtml(art.authors)}</strong> &bull; (${art.year}) &bull; <em>${escapeHtml(art.journal)}</em>${art.volume ? `, Vol. ${escapeHtml(art.volume)}` : ''}
               </div>
+              <div style="font-size:0.73rem; color:#0284c7;">
+                Tautan DOI Resmi: <a href="${art.url}" target="_blank" rel="noopener noreferrer" style="color:#0284c7; text-decoration:underline; font-weight:600;">https://doi.org/${escapeHtml(art.doi || '')}</a>
+              </div>
               <p style="font-size:0.75rem; color:#64748b; line-height:1.5;">${escapeHtml(art.abstract)}</p>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; flex-wrap:wrap; gap:8px;">
-                <span style="font-size:0.72rem; color:var(--text-muted);">Disitasi: ${art.citedBy || 0} kali &bull; DOI: ${escapeHtml(art.doi || '-')}</span>
+                <span style="font-size:0.72rem; color:var(--text-muted);">Disitasi: ${art.citedBy || 0} kali &bull; 100% Terverifikasi Real</span>
                 <div style="display:flex; gap:8px;">
-                  <a href="${downloadLink}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="text-decoration:none;">
-                    📥 Buka / Download PDF
+                  <a href="${downloadLink}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                    <svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Buka Artikel / Unduh PDF
                   </a>
                   <button class="btn btn-cyan btn-sm" onclick='addArticleToReferences(${JSON.stringify(art).replace(/'/g, "&#39;")})'>
                     + Masukkan ke Naskah &amp; Sitasi

@@ -172,7 +172,12 @@ INSTRUKSI PANJANG DAN BOBOT AKADEMIK:
       generatedText = await callGeminiPro(prompt, systemInstruction, apiKey);
     } catch (aiErr) {
       console.warn('[Gemini API Warning]:', aiErr.message, '-> Mengaktifkan Fallback Ilmiah.');
-      generatedText = generateAcademicFallback(manuscriptType, chapterId, title, field, userReferences);
+      generatedText = generateAcademicFallback(manuscriptType, chapterId, title, field, userReferences, {
+        approach,
+        method,
+        problemStatement,
+        theoreticalFramework: body && body.theoreticalFramework
+      });
       modeUsed = 'academic_fallback_template';
     }
 
