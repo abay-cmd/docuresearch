@@ -51,7 +51,11 @@ module.exports = async (req, res) => {
       return res.status(200).json({
         ok: true,
         action,
-        data: { analysis: result, generatedAt: new Date().toISOString() }
+        data: {
+          ...(typeof result === 'object' ? result : {}),
+          analysis: (typeof result === 'object' && result.fullReport) ? result.fullReport : result,
+          generatedAt: new Date().toISOString()
+        }
       });
     }
 
