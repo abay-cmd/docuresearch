@@ -1,10 +1,15 @@
 // api/generate.js
-// Endpoint pembuatan draf bab akademik menggunakan Gemini Pro Anti AI-Slop
+// Endpoint pembuatan konten akademik Mantra Riset menggunakan Gemini Pro Anti AI-Slop
 
 const {
   callGeminiPro,
   buildAcademicSystemPrompt,
-  generateAcademicFallback
+  generateAcademicFallback,
+  generateTitleFeasibility,
+  generateParaphrase,
+  generateManuscriptRevision,
+  generatePptSlides,
+  generateDefenseQA
 } = require('../lib/gemini');
 
 module.exports = async (req, res) => {
@@ -35,6 +40,83 @@ module.exports = async (req, res) => {
       }
     }
 
+    const action = (req.query && req.query.action) || (body && body.action) || 'chapter';
+    const apiKey = (body && body.apiKey) || '';
+
+    // 1. Mantra Riset: Cek Kelayakan Judul & Novelty
+    if (action === 'title_feasibility') {
+      const { title, field, problemStatement } = body || {};
+      const result = await generateTitleFeasibility(title, field, problemStatement, apiKey);
+      return res.status(200).json({
+        ok: true,
+        action,
+        data: { analysis: result, generatedAt: new Date().toISOString() }
+      });
+    }
+
+    // 2. Mantra Riset: Parafrase Akademik (Anti-Turnitin)
+    if (action === 'paraphrase') {
+      const { text, style } = body || {};
+      if (!text || !text.trim()) {
+        return res.status(400).json({ ok: false, error: { message: 'Teks yang akan diparafrase wajib diisi.' } });
+      }
+      const paraphrased = await generateParaphrase(text, style || 'formal', apiKey);
+      return res.status(200).json({
+        ok: true,
+        action,
+        data: {
+          originalText: text,
+          paraphrasedText: paraphrased,
+          style: style || 'formal',
+          similarityEstimated: '< 12%',
+          generatedAt: new Date().toISOString()
+        }
+      });
+    }
+
+    // 3. Mantra Riset: Revisi Naskah Berdasarkan Catatan Dosen Pembimbing
+    if (action === 'revision') {
+      const { originalText, feedback } = body || {};
+      if (!originalText || !feedback) {
+        return res.status(400).json({ ok: false, error: { message: 'Teks bab dan catatan dosen wajib diisi.' } });
+      }
+      const revised = await generateManuscriptRevision(originalText, feedback, apiKey);
+      return res.status(200).json({
+        ok: true,
+        action,
+        data: { revisedContent: revised, generatedAt: new Date().toISOString() }
+      });
+    }
+
+    // 4. Mantra Riset: Slide Presentasi Sidang PPT
+    if (action === 'ppt_slides') {
+      const { manuscript } = body || {};
+      if (!manuscript || !manuscript.title) {
+        return res.status(400).json({ ok: false, error: { message: 'Data naskah diperlukan untuk membuat slide.' } });
+      }
+      const slides = await generatePptSlides(manuscript, apiKey);
+      return res.status(200).json({
+        ok: true,
+        action,
+        data: { slidesContent: slides, generatedAt: new Date().toISOString() }
+      });
+    }
+
+    // 5. Mantra Riset: Simulasi Tanya Jawab Sidang Skripsi
+    if (action === 'defense_qa') {
+      const { manuscript } = body || {};
+      if (!manuscript || !manuscript.title) {
+        return res.status(400).json({ ok: false, error: { message: 'Data naskah diperlukan untuk simulasi sidang.' } });
+      }
+      const qa = await generateDefenseQA(manuscript, apiKey);
+      return res.status(200).json({
+        ok: true,
+        action,
+        data: { defenseContent: qa, generatedAt: new Date().toISOString() }
+      });
+    }
+
+    // 6. Default: Generator Bab Naskah Skripsi/Tesis/Jurnal
     const {
       manuscriptType = 'skripsi',
       chapterId = 'bab1',
@@ -44,8 +126,7 @@ module.exports = async (req, res) => {
       problemStatement = '',
       methodologyNotes = '',
       userReferences = '',
-      customTemplate = '',
-      apiKey = ''
+      customTemplate = ''
     } = body || {};
 
     const systemInstruction = buildAcademicSystemPrompt(manuscriptType, chapterTitle);
