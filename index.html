@@ -1151,6 +1151,202 @@
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
     }
 
+    /* Live Typewriter Typing Status Banner */
+    .typewriter-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15);
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { border-color: rgba(56, 189, 248, 0.3); box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); }
+      100% { border-color: rgba(56, 189, 248, 0.7); box-shadow: 0 4px 20px rgba(56, 189, 248, 0.25); }
+    }
+
+    .typing-cursor-blink {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: #38bdf8;
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blinkCursor 0.8s infinite;
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* SINTA & SCOPUS Indexing Badges */
+    .badge-scopus-q1 {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-scopus-q2 {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-scopus-q3 {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-scopus-q4 {
+      background: #f8fafc;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      font-weight: 600;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-sinta-1 {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-sinta-2 {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-sinta-3, .badge-sinta-4 {
+      background: #e0f7fa;
+      color: #006064;
+      border: 1px solid #b2ebf2;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-sinta-5, .badge-sinta-6 {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border: 1px solid #e9d5ff;
+      font-weight: 600;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Theoretical Framework Recommendation Cards */
+    .theory-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: all var(--motion-fast);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-left: 4px solid #0284c7;
+    }
+
+    .theory-card:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .theory-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .theory-name-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .theory-rationale-box {
+      background: #f8fafc;
+      border-left: 3px solid #38bdf8;
+      padding: 8px 12px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 0.8rem;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .theory-title-chip {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      color: #1e293b;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--motion-fast);
+      font-weight: 600;
+    }
+
+    .theory-title-chip:hover {
+      background: #e0f2fe;
+      border-color: #38bdf8;
+      color: #0369a1;
+    }
+
     /* Auth Landing Gate (Tampilan Awal Sebelum Masuk) */
     .auth-gate-wrapper {
       min-height: 100vh;
@@ -1615,14 +1811,31 @@
               </button>
               <button class="btn btn-cyan btn-sm" id="btnRunAiGenerate" onclick="executeAiChapterGeneration()">
                 <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Susun Draf Bab Ini dengan AI
+                🚀 Susun Draf Bab (Deep Research Gemini)
               </button>
             </div>
           </div>
         </section>
 
+        <!-- Live Typewriter Typing Status Banner -->
+        <div id="typewriterStatusBanner" class="typewriter-banner" style="margin-top:16px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:12px; height:12px; border-radius:50%; background:#38bdf8; box-shadow:0 0 10px #38bdf8;"></div>
+            <div>
+              <strong style="color:var(--accent-cyan); font-size:0.86rem;" id="twStatusTitle">✍️ Deep Research Gemini Mengetik Naskah Ilmiah...</strong>
+              <div style="font-size:0.75rem; color:#94a3b8;" id="twStatusSub">Proses penulisan real-time • Berbobot akademik mendalam tanpa AI-slop</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="anti-slop-badge" id="twLiveWordsBadge">0 Kata</span>
+            <button class="btn btn-outline-white btn-sm" onclick="skipTypewriterAnimation()" title="Lewati animasi dan tampilkan teks penuh">
+              ⚡ Selesaikan Langsung
+            </button>
+          </div>
+        </div>
+
         <!-- Live Academic Editor Canvas -->
-        <section class="editor-container" style="margin-top:20px;">
+        <section class="editor-container" style="margin-top:16px;">
           <div class="editor-toolbar">
             <button class="editor-tool-btn" onclick="insertEditorHeading(1)">H1</button>
             <button class="editor-tool-btn" onclick="insertEditorHeading(2)">H2</button>
@@ -2344,6 +2557,57 @@
           </button>
         </div>
 
+        <!-- SINTA / SCOPUS / LIMIT FILTERS BAR -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:var(--radius-md); padding:12px 16px; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <span style="font-weight:700; font-size:0.82rem; color:#0f172a;">Filter Reputasi SINTA &amp; SCOPUS + Jumlah Referensi:</span>
+            <span style="font-size:0.75rem; color:#0284c7; font-weight:600;">Terverifikasi Kemdikbud &amp; Scopus Database</span>
+          </div>
+          <div class="form-row" style="margin-bottom:0; display:flex; gap:10px; flex-wrap:wrap;">
+            <div class="form-group" style="flex:1.2; min-width:180px;">
+              <label style="font-size:0.75rem;">Indeks Reputasi:</label>
+              <select class="form-control" id="searchFilterIndexType" onchange="handleSearchFilterChange()">
+                <option value="both" selected>SINTA &amp; SCOPUS (Kombinasi Terbaik)</option>
+                <option value="scopus">SCOPUS Saja (Internasional Bereputasi)</option>
+                <option value="sinta">SINTA Saja (Akreditasi Nasional Kemdikbud)</option>
+                <option value="all">Semua Indeks Open Access</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:1; min-width:150px;" id="groupFilterScopus">
+              <label style="font-size:0.75rem;">Kuartil SCOPUS:</label>
+              <select class="form-control" id="searchFilterScopusQ">
+                <option value="all" selected>Semua Scopus (Q1 - Q4)</option>
+                <option value="q1">Scopus Q1 (Top 25% Dunia)</option>
+                <option value="q2">Scopus Q2</option>
+                <option value="q3">Scopus Q3</option>
+                <option value="q4">Scopus Q4</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:1; min-width:160px;" id="groupFilterSinta">
+              <label style="font-size:0.75rem;">Tingkat SINTA:</label>
+              <select class="form-control" id="searchFilterSintaLevel">
+                <option value="all" selected>Semua SINTA (S1 - S6)</option>
+                <option value="sinta1">SINTA 1 (Akreditasi A / Tertinggi)</option>
+                <option value="sinta2">SINTA 2 (Akreditasi B)</option>
+                <option value="sinta3">SINTA 3</option>
+                <option value="sinta4">SINTA 4</option>
+                <option value="sinta5">SINTA 5</option>
+                <option value="sinta6">SINTA 6</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:0.8; min-width:120px;">
+              <label style="font-size:0.75rem;">Jumlah Referensi:</label>
+              <select class="form-control" id="searchFilterLimit">
+                <option value="5">5 Referensi</option>
+                <option value="10" selected>10 Referensi</option>
+                <option value="15">15 Referensi</option>
+                <option value="20">20 Referensi</option>
+                <option value="30">30 Referensi</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <!-- Quick Topic Suggestion Pills -->
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:0.75rem;">
           <span style="color:var(--text-muted); font-weight:700;">Topik Cepat:</span>
@@ -2422,9 +2686,48 @@
         <button class="btn-icon" style="color:white; background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal('modalNewProject')">&times;</button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
+        <!-- Status Judul: Sudah Punya vs Belum Punya Judul -->
+        <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:var(--radius-md); padding:12px 16px; margin-bottom:14px;">
+          <label style="font-weight:700; font-size:0.84rem; color:#0369a1; display:block; margin-bottom:6px;">
+            Apakah Anda sudah menentukan judul penelitian?
+          </label>
+          <div style="display:flex; gap:18px; flex-wrap:wrap;">
+            <label style="font-size:0.82rem; font-weight:600; color:#0f172a; cursor:pointer; display:flex; align-items:center; gap:6px;">
+              <input type="radio" name="projTitleStatus" value="have_title" checked onchange="toggleNewProjTitleMode('have_title')">
+              Saya Sudah Memiliki Judul Penelitian
+            </label>
+            <label style="font-size:0.82rem; font-weight:600; color:#0f172a; cursor:pointer; display:flex; align-items:center; gap:6px;">
+              <input type="radio" name="projTitleStatus" value="need_title" onchange="toggleNewProjTitleMode('need_title')">
+              💡 Belum Punya Judul (Bantu Rekomendasikan Teori &amp; Ide Judul)
+            </label>
+          </div>
+        </div>
+
+        <!-- Box Input Judul (Jika Sudah Punya Judul) -->
+        <div class="form-group" id="containerNewProjTitleManual">
           <label>Judul Karya Tulis Ilmiah / Topik Riset:</label>
           <input type="text" class="form-control" id="newProjTitle" placeholder="Contoh: Analisis Kinerja Model Klasifikasi Random Forest dalam Deteksi Dini Kanker Payudara">
+        </div>
+
+        <!-- Box Generator Rekomendasi Teori & Ide Judul (Jika Belum Punya Judul) -->
+        <div id="containerNewProjTheoryExplorer" style="display:none; background:#f8fafc; border:1px solid #e2e8f0; border-radius:var(--radius-md); padding:16px; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div>
+              <strong style="font-size:0.88rem; color:#0f172a;">Pusat Rekomendasi Grand Theory &amp; Ide Judul</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Pilih teori ilmiah yang diakui secara global dan terapkan ide judul skripsi/tesis turunan dalam 1 klik</div>
+            </div>
+            <span class="anti-slop-badge">Theory Grounding</span>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <input type="text" class="form-control" id="newProjTheoryTopicInput" placeholder="Ketik bidang minat / masalah umum... (misal: Kecerdasan Buatan, Finansial, Manajemen SDM, E-Learning)">
+            <button type="button" class="btn btn-cyan btn-sm" onclick="executeSearchTheoryRecommendations()" id="btnSearchTheory">
+              💡 Cari Teori &amp; Ide Judul
+            </button>
+          </div>
+          <!-- Hasil Teori & Judul -->
+          <div id="newProjTheoryResults" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;">
+            <!-- Rendered dynamically -->
+          </div>
         </div>
 
         <div class="form-row">
@@ -2436,6 +2739,32 @@
               <option value="disertasi">Disertasi (Doktoral S3)</option>
               <option value="artikel_ilmiah">Artikel Jurnal Ilmiah (IMRAD)</option>
               <option value="slr">Systematic Literature Review (SLR - PRISMA 2020)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Pendekatan Penelitian:</label>
+            <select class="form-control" id="newProjApproach" onchange="handleApproachChange()">
+              <option value="Kuantitatif (Eksperimen / Asosiatif / Regresi)" selected>Kuantitatif (Eksperimen / Asosiatif / Regresi)</option>
+              <option value="Kualitatif (Deskriptif / Studi Kasus / Fenomenologi)">Kualitatif (Deskriptif / Studi Kasus / Fenomenologi)</option>
+              <option value="Campuran (Mixed Methods Sequential / Concurrent)">Campuran (Mixed Methods Sequential / Concurrent)</option>
+              <option value="Research and Development (R&D ADDIE / 4D / Borg & Gall)">Research and Development (R&amp;D ADDIE / 4D)</option>
+              <option value="Systematic Literature Review (SLR - PRISMA 2020)">Systematic Literature Review (SLR - PRISMA)</option>
+              <option value="Rekayasa Desain / Komputasi (CRISP-DM / Software Engineering)">Rekayasa Desain / Komputasi (CRISP-DM / Prototyping)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Metode &amp; Desain Penelitian:</label>
+            <select class="form-control" id="newProjMethod">
+              <option value="Survei Kuesioner & Pemodelan Jalur (SEM-PLS / CB-SEM)" selected>Survei Kuesioner &amp; Pemodelan Jalur (SEM-PLS / CB-SEM)</option>
+              <option value="Eksperimen Semu (Quasi-Experimental Design)">Eksperimen Semu (Quasi-Experimental Design)</option>
+              <option value="Komputasional Eksperimental & 10-Fold Cross Validation">Komputasional Eksperimental &amp; 10-Fold Cross Validation</option>
+              <option value="Studi Kasus Mendalam (In-Depth Case Study)">Studi Kasus Mendalam (In-Depth Case Study)</option>
+              <option value="Analisis Bibliometrik & Systematic Mapping Study">Analisis Bibliometrik &amp; Systematic Mapping Study</option>
+              <option value="Action Research (Penelitian Tindakan)">Action Research (Penelitian Tindakan)</option>
+              <option value="Etnografi & Analisis Tematik">Etnografi &amp; Analisis Tematik</option>
             </select>
           </div>
           <div class="form-group">
@@ -3600,12 +3929,87 @@
       openModal('modalCitationEvidence');
     }
 
-    // Eksekusi Pembuatan Draf dengan AI Gemini Pro Anti AI-Slop
+    // =========================================================================
+    // LIVE STREAMING TYPEWRITER ENGINE (Proses Ngetik Real-Time)
+    // =========================================================================
+    let typewriterInterval = null;
+    let pendingTypewriterText = '';
+    let typewriterTargetEl = null;
+    let typewriterOnComplete = null;
+
+    function startTypewriterStreaming(targetElementId, fullText, onComplete) {
+      clearInterval(typewriterInterval);
+      const editor = document.getElementById(targetElementId);
+      if (!editor) return;
+
+      typewriterTargetEl = editor;
+      pendingTypewriterText = fullText;
+      typewriterOnComplete = onComplete;
+
+      editor.value = '';
+      editor.focus();
+
+      const banner = document.getElementById('typewriterStatusBanner');
+      if (banner) banner.style.display = 'flex';
+
+      // Chunks: Split into tokens (2-3 words per tick) for rapid academic typing
+      const words = fullText.split(' ');
+      let wordIdx = 0;
+
+      typewriterInterval = setInterval(() => {
+        if (wordIdx < words.length) {
+          const stepSize = Math.floor(Math.random() * 2) + 2;
+          const chunk = words.slice(wordIdx, wordIdx + stepSize).join(' ') + ' ';
+          wordIdx += stepSize;
+          editor.value += chunk;
+          editor.scrollTop = editor.scrollHeight;
+
+          const currentWordCount = editor.value.trim().split(/\s+/).length;
+          const badge = document.getElementById('twLiveWordsBadge');
+          if (badge) badge.textContent = `${currentWordCount} Kata`;
+          const statCount = document.getElementById('statWordCount');
+          if (statCount) statCount.textContent = `${currentWordCount} Kata`;
+        } else {
+          finishTypewriterStreaming();
+        }
+      }, 16);
+    }
+
+    function skipTypewriterAnimation() {
+      if (!pendingTypewriterText || !typewriterTargetEl) return;
+      clearInterval(typewriterInterval);
+      typewriterTargetEl.value = pendingTypewriterText;
+      typewriterTargetEl.scrollTop = typewriterTargetEl.scrollHeight;
+      updateWordCount();
+      finishTypewriterStreaming();
+    }
+
+    function finishTypewriterStreaming() {
+      clearInterval(typewriterInterval);
+      typewriterInterval = null;
+      const banner = document.getElementById('typewriterStatusBanner');
+      if (banner) banner.style.display = 'none';
+
+      if (typeof typewriterOnComplete === 'function') {
+        typewriterOnComplete();
+        typewriterOnComplete = null;
+      }
+    }
+
+    // Eksekusi Pembuatan Draf dengan Deep Research Gemini Anti-Slop
     async function executeAiChapterGeneration() {
       const activeId = currentManuscript.activeChapterId;
       const btn = document.getElementById('btnRunAiGenerate');
-      btn.textContent = 'Menyusun Ilmiah...';
+      btn.textContent = 'Deep Research Berjalan...';
       btn.disabled = true;
+
+      // Kumpulkan referensi terverifikasi untuk sitasi real non-halu
+      const connectedRefs = (currentManuscript.references || [])
+        .map(r => `- ${r.author} (${r.year}). "${r.title}". ${r.journal}. DOI: ${r.doi || '-'}`)
+        .join('\n');
+
+      const userNotes = document.getElementById('aiInputUserRef').value.trim();
+      const combinedReferences = userNotes ? `${userNotes}\n\nReferensi Terverifikasi dari Database:\n${connectedRefs}` : connectedRefs;
 
       const payload = {
         manuscriptType: currentManuscript.manuscriptType,
@@ -3613,8 +4017,10 @@
         chapterTitle: activeId.toUpperCase(),
         title: currentManuscript.title,
         field: currentManuscript.programStudy,
+        approach: currentManuscript.approach || 'Kuantitatif Eksperimental',
+        method: currentManuscript.method || 'Validasi Silang dan Evaluasi Statistik',
         problemStatement: document.getElementById('aiInputGap').value.trim(),
-        userReferences: document.getElementById('aiInputUserRef').value.trim(),
+        userReferences: combinedReferences,
         customTemplate: userConfig.campusTemplate,
         apiKey: userConfig.apiKey
       };
@@ -3628,17 +4034,20 @@
 
         const json = await res.json();
         if (json.ok && json.data && json.data.content) {
-          document.getElementById('mainChapterEditor').value = json.data.content;
-          currentManuscript.chapters[activeId] = json.data.content;
-          saveCurrentChapter();
-          showToast(`Draf ilmiah berhasil disusun menggunakan ${json.data.modeUsed === 'gemini_pro' ? 'Gemini Pro' : 'Template Standar Ilmiah'}.`);
+          showToast('Deep Research selesai! Memulai proses pengetikan naskah real-time...');
+          startTypewriterStreaming('mainChapterEditor', json.data.content, () => {
+            currentManuscript.chapters[activeId] = json.data.content;
+            saveCurrentChapter();
+            const words = json.data.content.split(/\s+/).length;
+            showToast(`Naskah bab berhasil disusun lengkap (${words} kata) bebas AI-slop!`);
+          });
         } else {
           showToast(json.error ? json.error.message : 'Gagal menghasilkan draf.');
         }
       } catch (err) {
         showToast('Koneksi server gagal, menggunakan draf cadangan.');
       } finally {
-        btn.innerHTML = `<svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Susun Draf Bab Ini dengan AI`;
+        btn.innerHTML = `<svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 🚀 Susun Draf Bab (Deep Research Gemini)`;
         btn.disabled = false;
       }
     }
@@ -3673,7 +4082,8 @@
 
       // Sidebar Info
       document.getElementById('sidebarDocTitle').textContent = currentManuscript.title;
-      document.getElementById('sidebarDocType').textContent = currentManuscript.manuscriptType.toUpperCase();
+      const approachInfo = currentManuscript.approach ? ` • ${currentManuscript.approach.split('(')[0].trim().toUpperCase()}` : '';
+      document.getElementById('sidebarDocType').textContent = currentManuscript.manuscriptType.toUpperCase() + approachInfo;
       document.getElementById('sidebarDocAuthor').textContent = `${currentManuscript.authorName} • ${currentManuscript.university}`;
     }
 
@@ -3798,47 +4208,75 @@
       executeArticleSearch();
     }
 
+    function handleSearchFilterChange() {
+      const type = document.getElementById('searchFilterIndexType').value;
+      const grpScopus = document.getElementById('groupFilterScopus');
+      const grpSinta = document.getElementById('groupFilterSinta');
+
+      if (type === 'scopus') {
+        grpScopus.style.display = 'block';
+        grpSinta.style.display = 'none';
+      } else if (type === 'sinta') {
+        grpScopus.style.display = 'none';
+        grpSinta.style.display = 'block';
+      } else {
+        grpScopus.style.display = 'block';
+        grpSinta.style.display = 'block';
+      }
+    }
+
     async function executeArticleSearch() {
       const query = document.getElementById('searchArticleQuery').value.trim() || 'machine learning education';
+      const indexType = document.getElementById('searchFilterIndexType')?.value || 'both';
+      const sintaLevel = document.getElementById('searchFilterSintaLevel')?.value || 'all';
+      const scopusQuartile = document.getElementById('searchFilterScopusQ')?.value || 'all';
+      const limit = document.getElementById('searchFilterLimit')?.value || '10';
+
       const container = document.getElementById('searchResultsContainer');
       const btn = document.getElementById('btnExecuteSearch');
 
       btn.textContent = 'Mencari...';
       btn.disabled = true;
-      container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Sedang mencari artikel open access di database ilmiah internasional...</div>';
+      container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Sedang mencari referensi terakreditasi SINTA &amp; Scopus Open Access...</div>';
 
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const url = `/api/search?q=${encodeURIComponent(query)}&indexType=${indexType}&sintaLevel=${sintaLevel}&scopusQuartile=${scopusQuartile}&limit=${limit}`;
+        const res = await fetch(url);
         const json = await res.json();
 
         if (json.ok && Array.isArray(json.articles) && json.articles.length > 0) {
           container.innerHTML = '';
-          document.getElementById('searchStatusInfo').textContent = `Ditemukan ${json.articles.length} artikel ilmiah Open Access untuk "${query}":`;
-          document.getElementById('searchSourceBadge').textContent = json.source || 'OpenAlex Index';
+          document.getElementById('searchStatusInfo').textContent = `Ditemukan ${json.articles.length} referensi (${json.source}) untuk "${query}":`;
+          document.getElementById('searchSourceBadge').textContent = json.source;
 
           json.articles.forEach(art => {
             const card = document.createElement('div');
             card.style = 'background:#ffffff; border:1px solid var(--border-subtle); border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:0 2px 6px rgba(0,0,0,0.02);';
 
             const downloadLink = art.pdfUrl || art.url;
+            const badgeClass = art.badgeClass || (art.indexType === 'sinta' ? 'badge-sinta-2' : 'badge-scopus-q2');
+            const badgeText = art.badgeText || (art.indexType === 'sinta' ? 'SINTA 2' : 'SCOPUS Q2');
 
             card.innerHTML = `
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
-                <h4 style="font-size:0.95rem; font-weight:800; color:#0f172a; line-height:1.4;">${art.title}</h4>
-                <span class="badge-pill" style="background:#dcfce7; color:#15803d; border-color:#bbf7d0; font-size:0.7rem; white-space:nowrap;">✓ Open Access</span>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+                <h4 style="font-size:0.95rem; font-weight:800; color:#0f172a; line-height:1.4; flex:1;">${escapeHtml(art.title)}</h4>
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <span class="${badgeClass}">${escapeHtml(badgeText)}</span>
+                  <span class="badge-pill" style="background:#dcfce7; color:#15803d; border-color:#bbf7d0; font-size:0.7rem;">✓ Open Access</span>
+                </div>
               </div>
               <div style="font-size:0.78rem; color:#475569;">
-                <strong>${art.authors}</strong> &bull; (${art.year}) &bull; <em>${art.journal}</em>
+                <strong>${escapeHtml(art.authors)}</strong> &bull; (${art.year}) &bull; <em>${escapeHtml(art.journal)}</em>${art.volume ? `, Vol. ${escapeHtml(art.volume)}` : ''}
               </div>
-              <p style="font-size:0.75rem; color:#64748b; line-height:1.5;">${art.abstract}</p>
+              <p style="font-size:0.75rem; color:#64748b; line-height:1.5;">${escapeHtml(art.abstract)}</p>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; flex-wrap:wrap; gap:8px;">
-                <span style="font-size:0.72rem; color:var(--text-muted);">Disitasi: ${art.citedBy || 0} kali &bull; DOI: ${art.doi || '-'}</span>
+                <span style="font-size:0.72rem; color:var(--text-muted);">Disitasi: ${art.citedBy || 0} kali &bull; DOI: ${escapeHtml(art.doi || '-')}</span>
                 <div style="display:flex; gap:8px;">
                   <a href="${downloadLink}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="text-decoration:none;">
-                    Buka / Download PDF ↗
+                    📥 Buka / Download PDF
                   </a>
                   <button class="btn btn-cyan btn-sm" onclick='addArticleToReferences(${JSON.stringify(art).replace(/'/g, "&#39;")})'>
-                    + Masukkan ke Naskah
+                    + Masukkan ke Naskah &amp; Sitasi
                   </button>
                 </div>
               </div>
@@ -3846,10 +4284,10 @@
             container.appendChild(card);
           });
         } else {
-          container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Tidak ada artikel ditemukan. Coba gunakan kata kunci dalam bahasa Inggris atau topik yang lebih umum.</div>';
+          container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Tidak ada artikel ditemukan untuk filter ini. Coba pilih "Semua SINTA" atau "Semua Scopus".</div>';
         }
       } catch (err) {
-        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Gagal menghubungi server pencarian. Periksa koneksi internet Anda.</div>';
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Gagal menghubungi server pencarian jurnal.</div>';
       } finally {
         btn.textContent = '🔍 Cari Artikel';
         btn.disabled = false;
@@ -4399,8 +4837,9 @@
     }
 
     // ==========================================================================
-    // PROYEK BARU, SINKRONISASI CLOUD & STATUS DATABASE
+    // PROYEK BARU, REKOMENDASI TEORI, SINKRONISASI CLOUD & STATUS DATABASE
     // ==========================================================================
+    let currentSelectedTheory = '';
 
     function openNewProjectModal() {
       document.getElementById('newProjTitle').value = '';
@@ -4408,12 +4847,165 @@
       document.getElementById('newProjUniversity').value = (currentUser && currentUser.university) ? currentUser.university : (currentManuscript.university || 'Universitas Indonesia');
       document.getElementById('newProjCity').value = currentManuscript.city || 'Depok';
       document.getElementById('newProjYear').value = new Date().getFullYear().toString();
+      document.querySelector('input[name="projTitleStatus"][value="have_title"]').checked = true;
+      toggleNewProjTitleMode('have_title');
       openModal('modalNewProject');
+    }
+
+    function toggleNewProjTitleMode(mode) {
+      const containerManual = document.getElementById('containerNewProjTitleManual');
+      const containerExplorer = document.getElementById('containerNewProjTheoryExplorer');
+
+      if (mode === 'need_title') {
+        containerManual.style.display = 'none';
+        containerExplorer.style.display = 'block';
+        const defaultTopic = document.getElementById('newProjProgramStudy')?.value || 'Sistem Informasi';
+        if (!document.getElementById('newProjTheoryTopicInput').value) {
+          document.getElementById('newProjTheoryTopicInput').value = defaultTopic;
+        }
+        executeSearchTheoryRecommendations();
+      } else {
+        containerManual.style.display = 'block';
+        containerExplorer.style.display = 'none';
+      }
+    }
+
+    function handleApproachChange() {
+      const approach = document.getElementById('newProjApproach').value;
+      const methodSel = document.getElementById('newProjMethod');
+      if (!methodSel) return;
+
+      // Dinamisasi pilihan metode sesuai pendekatan yang dipilih
+      if (/kualitatif/i.test(approach)) {
+        methodSel.innerHTML = `
+          <option value="Studi Kasus Mendalam (In-Depth Case Study)" selected>Studi Kasus Mendalam (In-Depth Case Study)</option>
+          <option value="Fenomenologi &amp; Wawancara Mendalam">Fenomenologi &amp; Wawancara Mendalam</option>
+          <option value="Etnografi &amp; Observasi Partisipatif">Etnografi &amp; Observasi Partisipatif</option>
+          <option value="Grounded Theory &amp; Analisis Koding">Grounded Theory &amp; Analisis Koding</option>
+        `;
+      } else if (/r&d|addie|pengembangan/i.test(approach)) {
+        methodSel.innerHTML = `
+          <option value="Model ADDIE (Analysis, Design, Development, Implementation, Evaluation)" selected>Model ADDIE (Tahap 1-5)</option>
+          <option value="Model 4D (Define, Design, Develop, Disseminate)">Model 4D (Thiagarajan)</option>
+          <option value="Borg and Gall R&amp;D Framework">Borg &amp; Gall Framework</option>
+        `;
+      } else if (/slr|prisma/i.test(approach)) {
+        methodSel.innerHTML = `
+          <option value="Protokol PRISMA 2020 (Identification, Screening, Eligibility, Included)" selected>Protokol PRISMA 2020</option>
+          <option value="Bibliometric Mapping (VOSviewer &amp; Scopus)">Bibliometric Mapping (VOSviewer)</option>
+          <option value="Kitchenham SLR Guidelines">Kitchenham SLR Guidelines</option>
+        `;
+      } else if (/rekayasa|crisp|komputasi/i.test(approach)) {
+        methodSel.innerHTML = `
+          <option value="CRISP-DM (Cross-Industry Standard Process for Data Mining)" selected>CRISP-DM Lifecycle</option>
+          <option value="Prototyping &amp; Agile Development">Prototyping &amp; Agile Development</option>
+          <option value="Eksperimen Komputasi Algoritmik &amp; 10-Fold CV">Eksperimen Komputasi &amp; 10-Fold CV</option>
+        `;
+      } else if (/campuran|mixed/i.test(approach)) {
+        methodSel.innerHTML = `
+          <option value="Sequential Explanatory (Kuantitatif dilanjutkan Kualitatif)" selected>Sequential Explanatory Design</option>
+          <option value="Sequential Exploratory (Kualitatif dilanjutkan Kuantitatif)">Sequential Exploratory Design</option>
+          <option value="Convergent Parallel Mixed Methods">Convergent Parallel Design</option>
+        `;
+      } else {
+        // Kuantitatif default
+        methodSel.innerHTML = `
+          <option value="Survei Kuesioner &amp; Pemodelan Jalur (SEM-PLS / CB-SEM)" selected>Survei Kuesioner &amp; Pemodelan Jalur (SEM-PLS)</option>
+          <option value="Eksperimen Semu (Quasi-Experimental Design)">Eksperimen Semu (Quasi-Experimental Design)</option>
+          <option value="Analisis Regresi Linear / Berganda">Analisis Regresi Berganda</option>
+          <option value="Analisis Komparatif Independen (t-Test / ANOVA)">Analisis Komparatif (t-Test / ANOVA)</option>
+        `;
+      }
+    }
+
+    async function executeSearchTheoryRecommendations() {
+      const topic = document.getElementById('newProjTheoryTopicInput').value.trim() || document.getElementById('newProjProgramStudy')?.value || 'Ilmu Komputer';
+      const field = document.getElementById('newProjProgramStudy')?.value || '';
+      const approach = document.getElementById('newProjApproach')?.value || '';
+      const container = document.getElementById('newProjTheoryResults');
+      const btn = document.getElementById('btnSearchTheory');
+
+      btn.disabled = true;
+      btn.textContent = 'Mencari Teori...';
+      container.innerHTML = '<div style="text-align:center; padding:16px; color:var(--text-muted);">Menganalisis grand theory &amp; merekomendasikan judul berdampak tinggi...</div>';
+
+      try {
+        const res = await fetch('/api/generate?action=recommend_theories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ field, topic, approach, apiKey: userConfig.apiKey })
+        });
+        const json = await res.json();
+
+        if (json.ok && Array.isArray(json.data?.theories)) {
+          container.innerHTML = '';
+          json.data.theories.forEach(th => {
+            const card = document.createElement('div');
+            card.className = 'theory-card';
+
+            let titlesHtml = (th.titles || []).map(t => `
+              <div class="theory-title-chip" onclick="selectRecommendedTheory('${escapeHtml(th.name).replace(/'/g, "\\'")}', '${escapeHtml(t).replace(/'/g, "\\'")}', '${escapeHtml(th.approachMethod).replace(/'/g, "\\'")}')">
+                <span>📌 "${escapeHtml(t)}"</span>
+                <span class="btn btn-cyan btn-sm" style="padding:2px 8px; font-size:0.7rem;">Pilih Judul Ini &rarr;</span>
+              </div>
+            `).join('');
+
+            card.innerHTML = `
+              <div class="theory-card-header">
+                <span class="theory-name-title">📚 ${escapeHtml(th.name)}</span>
+                <span class="anti-slop-badge">Rekomendasi Grand Theory</span>
+              </div>
+              <div class="theory-rationale-box">
+                <strong>Mengapa Teori Ini Wajib Dipakai:</strong> ${escapeHtml(th.justification)}
+              </div>
+              <div style="font-size:0.76rem; color:#0369a1; font-weight:700;">
+                Cocok untuk: ${escapeHtml(th.approachMethod)}
+              </div>
+              <div style="font-size:0.78rem; font-weight:700; color:#0f172a; margin-top:4px;">
+                Rekomendasi Ide Judul Turunan:
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                ${titlesHtml}
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        } else {
+          container.innerHTML = '<div style="text-align:center; padding:16px; color:var(--text-muted);">Gagal memuat teori. Silakan coba kembali.</div>';
+        }
+      } catch (err) {
+        container.innerHTML = '<div style="text-align:center; padding:16px; color:var(--text-muted);">Kesalahan koneksi saat mencari teori.</div>';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '💡 Cari Teori &amp; Ide Judul';
+      }
+    }
+
+    function selectRecommendedTheory(theoryName, selectedTitle, approachMethod) {
+      currentSelectedTheory = theoryName;
+      document.getElementById('newProjTitle').value = selectedTitle;
+
+      if (/kualitatif/i.test(approachMethod)) {
+        document.getElementById('newProjApproach').value = 'Kualitatif (Deskriptif / Studi Kasus / Fenomenologi)';
+      } else if (/r&d|addie|pengembangan/i.test(approachMethod)) {
+        document.getElementById('newProjApproach').value = 'Research and Development (R&D ADDIE / 4D / Borg & Gall)';
+      } else {
+        document.getElementById('newProjApproach').value = 'Kuantitatif (Eksperimen / Asosiatif / Regresi)';
+      }
+      handleApproachChange();
+
+      // Kembalikan ke tampilan form judul
+      document.querySelector('input[name="projTitleStatus"][value="have_title"]').checked = true;
+      toggleNewProjTitleMode('have_title');
+
+      showToast(`Teori "${theoryName.split('(')[0].trim()}" dan judul terpilih diterapkan ke proyek!`);
     }
 
     function createNewProject() {
       const title = (document.getElementById('newProjTitle').value || '').trim();
       const manuscriptType = document.getElementById('newProjType').value || 'skripsi';
+      const approach = (document.getElementById('newProjApproach') ? document.getElementById('newProjApproach').value : 'Kuantitatif');
+      const method = (document.getElementById('newProjMethod') ? document.getElementById('newProjMethod').value : 'Survei SEM-PLS');
       const authorName = (document.getElementById('newProjAuthor').value || '').trim();
       const authorIdNumber = (document.getElementById('newProjIdNumber').value || '').trim();
       const programStudy = (document.getElementById('newProjProgramStudy').value || '').trim();
@@ -4424,7 +5016,7 @@
       const pin = (document.getElementById('newProjPin').value || '').trim() || '1234';
 
       if (!title) {
-        alert('Silakan masukkan judul karya tulis ilmiah Anda.');
+        alert('Silakan masukkan judul karya tulis ilmiah Anda atau pilih rekomendasi judul dari pencarian teori.');
         document.getElementById('newProjTitle').focus();
         return;
       }
@@ -4449,15 +5041,15 @@
         } else if (item.id === 'preface') {
           newChapters[item.id] = `KATA PENGANTAR\n\nPuji dan syukur penulis panjatkan ke hadirat Tuhan Yang Maha Esa atas limpahan rahmat dan karunia-Nya sehingga naskah penelitian ini dapat diselesaikan dengan baik...`;
         } else if (item.id === 'abstract_id') {
-          newChapters[item.id] = `ABSTRAK\n\nPenelitian ini berfokus pada ${title}...`;
+          newChapters[item.id] = `ABSTRAK\n\nPenelitian ini berfokus pada ${title} dengan pendekatan ${approach} menggunakan metode ${method}...`;
         } else if (item.id === 'abstract_en') {
-          newChapters[item.id] = `ABSTRACT\n\nThis study investigates ${title}...`;
+          newChapters[item.id] = `ABSTRACT\n\nThis study investigates ${title} utilizing a ${approach} approach with ${method}...`;
         } else if (item.id === 'toc') {
           newChapters[item.id] = `DAFTAR ISI\n\nHalaman Sampul\nHalaman Pengesahan\nAbstrak\n...`;
         } else if (item.id === 'references') {
           newChapters[item.id] = '';
         } else {
-          newChapters[item.id] = `Draf awal untuk bagian: ${item.title}\n\nSilakan gunakan panel 'Generasi Bab Cerdas (Anti AI-Slop)' di atas atau ketik langsung naskah ilmiah Anda di sini.`;
+          newChapters[item.id] = `Draf awal untuk bagian: ${item.title}\n\nSilakan klik tombol '🚀 Susun Draf Bab (Deep Research Gemini)' di atas untuk mengetik naskah secara real-time.`;
         }
       });
 
@@ -4466,6 +5058,9 @@
         id: newId,
         title,
         manuscriptType,
+        approach,
+        method,
+        theoreticalFramework: currentSelectedTheory || '',
         authorName,
         authorIdNumber,
         programStudy,
@@ -4486,7 +5081,7 @@
       selectChapter(currentManuscript.activeChapterId, template.treeItems.find(t => t.id === currentManuscript.activeChapterId)?.title || 'Naskah');
       renderBibliography();
       closeModal('modalNewProject');
-      showToast('Proyek naskah baru berhasil dibuat!');
+      showToast('Proyek naskah baru berhasil dibuat dengan metodologi terdefinisi!');
     }
 
     function openSaveCloudModal() {

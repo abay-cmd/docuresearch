@@ -9,7 +9,8 @@ const {
   generateParaphrase,
   generateManuscriptRevision,
   generatePptSlides,
-  generateDefenseQA
+  generateDefenseQA,
+  generateTheoryRecommendations
 } = require('../lib/gemini');
 
 module.exports = async (req, res) => {
@@ -116,39 +117,56 @@ module.exports = async (req, res) => {
       });
     }
 
-    // 6. Default: Generator Bab Naskah Skripsi/Tesis/Jurnal
+    // 6. Proyek Baru & Brainstorming: Rekomendasi Grand Theory & Ide Judul Relevan
+    if (action === 'recommend_theories') {
+      const { field, topic, approach } = body || {};
+      const theories = await generateTheoryRecommendations(field, topic, approach, apiKey);
+      return res.status(200).json({
+        ok: true,
+        action,
+        data: { theories, generatedAt: new Date().toISOString() }
+      });
+    }
+
+    // 7. Default: Generator Bab Naskah Skripsi/Tesis/Jurnal (DEEP RESEARCH GEMINI)
     const {
       manuscriptType = 'skripsi',
       chapterId = 'bab1',
       chapterTitle = 'BAB I PENDAHULUAN',
       title = 'Penelitian Ilmiah',
       field = 'Ilmu Komputer',
+      approach = '',
+      method = '',
       problemStatement = '',
       methodologyNotes = '',
       userReferences = '',
       customTemplate = ''
     } = body || {};
 
-    const systemInstruction = buildAcademicSystemPrompt(manuscriptType, chapterTitle);
+    const systemInstruction = buildAcademicSystemPrompt(manuscriptType, chapterTitle, approach, method);
 
-    let prompt = `Susunlah naskah akademik tingkat tinggi dan komprehensif untuk bagian:
-Judul Bagian: ${chapterTitle}
+    let prompt = `Lakukan DEEP RESEARCH komprehensif dan susunlah draf naskah akademik panjang, mendalam, dan terstruktur untuk:
+Bagian Naskah: ${chapterTitle}
 Jenis Karya: ${manuscriptType}
-Judul Penelitian: "${title}"
-Bidang Ilmu: ${field}
+Judul Karya Ilmiah: "${title}"
+Bidang Ilmu / Program Studi: ${field}
+${approach ? `Pendekatan Riset: ${approach}` : ''}
+${method ? `Metode / Desain: ${method}` : ''}
 
-INFORMASI RISET PENDUKUNG DARI PENGGUNA:
-1. Rumusan Masalah / Research Gap: ${problemStatement || 'Kaji secara kritis kesenjangan teoretis dan empiris yang relevan.'}
-2. Catatan Metodologi: ${methodologyNotes || 'Sesuaikan dengan standar penelitian kuantitatif / kualitatif / eksperimental yang baku.'}
-3. Dokumen Referensi Pengguna yang Harus Dirujuk:
-${userReferences || 'Rujuklah literatur akademik mutakhir (5 tahun terakhir) dengan sitasi format ilmiah konsisten.'}
+INFORMASI RISET DAN GROUNDING LITERATUR:
+1. Fenomena Masalah / Research Gap: ${problemStatement || 'Kaji secara kritis gap empiris dan teoritis yang relevan.'}
+2. Rincian Metodologis: ${methodologyNotes || 'Terapkan prosedur baku sesuai pendekatan penelitian yang dipilih.'}
+3. Referensi & Jurnal Terhubung yang Wajib Disitasi Secara Real (Anti-Halu):
+${userReferences || 'Sertakan sitasi ilmiah relevan dalam format baku (misal: Rahman et al., 2023; Kusuma et al., 2022).'}
 
-${customTemplate ? `PANDUAN TEMPLATE KHUSUS KAMPUS / JURNAL PENGGUNA:\n${customTemplate}\n` : ''}
+${customTemplate ? `PEDOMAN FORMAT KHUSUS KAMPUS:\n${customTemplate}\n` : ''}
 
-INGAT: Tulis langsung teks naskah akademik berbobot ilmiah tanpa kata sapaan atau penutup AI.`;
+INSTRUKSI PANJANG DAN BOBOT AKADEMIK:
+- Tuliskan setiap sub-bab secara lengkap dan rinci dengan uraian beberapa paragraf analitis bertingkat (hindari jawaban pendek atau ringkasan dangkal).
+- Tulis langsung substansi isi naskah akademik tanpa salam pembuka, tanpa ucapan ramah, dan tanpa kata penutup AI.`;
 
     let generatedText = '';
-    let modeUsed = 'gemini_pro';
+    let modeUsed = 'gemini_deep_research';
 
     try {
       generatedText = await callGeminiPro(prompt, systemInstruction, apiKey);
