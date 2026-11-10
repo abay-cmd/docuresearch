@@ -3583,9 +3583,9 @@
       // Trigger loader spesifik
       if (viewName === 'feasibility') {
         const titleInput = document.getElementById('feasibilityTitleInput');
-        if (titleInput && !titleInput.value) titleInput.value = currentManuscript.title;
+        if (titleInput) titleInput.value = currentManuscript.title;
         const fieldInput = document.getElementById('feasibilityFieldInput');
-        if (fieldInput && !fieldInput.value) fieldInput.value = currentManuscript.programStudy;
+        if (fieldInput) fieldInput.value = currentManuscript.programStudy;
       } else if (viewName === 'evidence') {
         renderCitationEvidenceList();
       } else if (viewName === 'revision') {
@@ -5744,8 +5744,30 @@
         pin,
         activeChapterId: template.defaultActive || 'bab1',
         chapters: newChapters,
-        references: currentManuscript.references || []
+        references: []
       };
+
+      currentManuscript.varX = '';
+      currentManuscript.varY = '';
+
+      // Reset input kelayakan judul ke proyek baru
+      const fTitle = document.getElementById('feasibilityTitleInput');
+      if (fTitle) fTitle.value = title;
+      const fField = document.getElementById('feasibilityFieldInput');
+      if (fField) fField.value = programStudy;
+      const fGap = document.getElementById('feasibilityGapInput');
+      if (fGap) fGap.value = '';
+      const fRes = document.getElementById('feasibilityResultContainer');
+      if (fRes) fRes.style.display = 'none';
+
+      // Reset AI Gap dan User Ref di Editor
+      const aiGap = document.getElementById('aiInputGap');
+      if (aiGap) aiGap.value = '';
+      const aiRef = document.getElementById('aiInputUserRef');
+      if (aiRef) aiRef.value = '';
+
+      // Update diagram studio ke judul baru
+      loadDiagramStudioType('conceptual_framework');
 
       saveToLocalStore();
       renderChapterNavTree();
