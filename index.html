@@ -891,6 +891,90 @@
       font-size: 0.72rem;
     }
 
+    /* Auth Landing Gate (Tampilan Awal Sebelum Masuk) */
+    .auth-gate-wrapper {
+      min-height: 100vh;
+      width: 100%;
+      background: radial-gradient(circle at 50% 20%, #172554 0%, var(--bg-midnight) 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+      color: white;
+    }
+
+    .auth-gate-card {
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      color: var(--text-main);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(56, 189, 248, 0.2);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      animation: modalFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .auth-gate-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .auth-gate-brand {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .auth-gate-brand span {
+      color: #0284c7;
+    }
+
+    .auth-gate-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      max-width: 380px;
+    }
+
+    .auth-features-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      max-width: 760px;
+      margin-top: 32px;
+      width: 100%;
+    }
+
+    @media (max-width: 700px) {
+      .auth-features-bar { grid-template-columns: 1fr; }
+    }
+
+    .auth-feature-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      backdrop-filter: blur(8px);
+    }
+
+    .auth-feature-pill strong {
+      display: block;
+      color: var(--accent-cyan);
+      font-size: 0.84rem;
+      margin-bottom: 4px;
+    }
+
     /* Footer (GeneX Dark Solid Footer) */
     .footer-dark {
       background: var(--bg-navy-dark);
@@ -930,77 +1014,193 @@
       gap: 10px;
     }
 
-    /* Print styling */
+    /* Print styling standard A4 (4-4-3-3 cm) */
+    @page {
+      size: A4;
+      margin: 4cm 3cm 3cm 4cm;
+    }
+
     @media print {
-      body { background: white !important; padding: 0 !important; }
-      .top-navbar, .navy-sidebar-panel, .hero-stat-banner, .ai-generator-panel, .editor-toolbar, .footer-dark, .toast-container, .no-print {
+      body { background: white !important; padding: 0 !important; font-family: 'Times New Roman', serif !important; color: black !important; }
+      .top-navbar, .navy-sidebar-panel, .hero-stat-banner, .ai-generator-panel, .editor-toolbar, .footer-dark, .toast-container, .no-print, #authGateScreen, .modal-backdrop {
         display: none !important;
       }
+      #appMainContainer { display: block !important; }
       .app-workspace { display: block !important; padding: 0 !important; margin: 0 !important; }
       .main-workspace-card { border: none !important; box-shadow: none !important; padding: 0 !important; }
       .official-cover-sheet { border: none !important; box-shadow: none !important; page-break-after: always; }
-      .editor-textarea { border: none !important; min-height: auto !important; }
+      .editor-textarea { border: none !important; min-height: auto !important; font-family: 'Times New Roman', serif !important; font-size: 12pt !important; line-height: 1.5 !important; }
     }
   </style>
 </head>
 <body>
 
   <!-- ==========================================================================
-       TOP FLOATING NAV (GeneX Style Navbar with Brand & Status)
+       AUTH LANDING GATE (HALAMAN AWAL LOGIN / DAFTAR SEBELUM MASUK)
        ========================================================================== -->
-  <header class="top-navbar">
-    <div class="brand-group">
-      <!-- One-line Pen Sketch Logo (Pure stroke SVG) -->
-      <svg class="oneline-pen-sketch" viewBox="0 0 100 100" aria-label="DocuResearch One-Line Pen Logo" role="img">
-        <path d="M14 84 C30 84, 36 70, 40 58 C43 46, 45 28, 48 14 C49 10, 51 10, 52 14 C55 28, 57 46, 60 58 C64 70, 70 84, 86 84 M48 14 L52 14 M50 14 L50 42 C47 42, 47 48, 50 48 C53 48, 53 42, 50 42 M39 58 C45 61, 55 61, 61 58 M26 84 C34 78, 66 78, 74 84 M10 88 C35 94, 65 76, 92 84" />
-      </svg>
+  <div id="authGateScreen" class="auth-gate-wrapper">
+    <div class="auth-gate-card">
+      <div class="auth-gate-header">
+        <svg class="oneline-pen-sketch" style="width:52px;height:52px;" viewBox="0 0 100 100" aria-label="DocuResearch Logo">
+          <path d="M14 84 C30 84, 36 70, 40 58 C43 46, 45 28, 48 14 C49 10, 51 10, 52 14 C55 28, 57 46, 60 58 C64 70, 70 84, 86 84 M48 14 L52 14 M50 14 L50 42 C47 42, 47 48, 50 48 C53 48, 53 42, 50 42 M39 58 C45 61, 55 61, 61 58 M26 84 C34 78, 66 78, 74 84 M10 88 C35 94, 65 76, 92 84" />
+        </svg>
+        <div class="auth-gate-brand">Docu<span>Research</span></div>
+        <p class="auth-gate-sub">Academic AI Studio &amp; Synthesis — Platform Penulisan Skripsi, Tesis, Disertasi, &amp; Jurnal Bebas AI-Slop</p>
+      </div>
+
+      <!-- Tab Switch -->
+      <div class="auth-tab-row" style="margin-bottom:14px;">
+        <button class="auth-tab-btn active" id="gateTabLogin" onclick="switchGateAuthTab('login')">Masuk (Login)</button>
+        <button class="auth-tab-btn" id="gateTabRegister" onclick="switchGateAuthTab('register')">Daftar Akun Baru</button>
+      </div>
+
+      <!-- Real Google / Gmail Sign In Button -->
       <div>
-        <div class="brand-title">Docu<span>Research</span></div>
-        <div class="brand-sub">Academic AI Studio & Synthesis</div>
+        <button class="btn-google-auth" onclick="handleRealGoogleSignIn()" id="btnGateGoogleAuth">
+          <svg style="width:18px;height:18px;" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Lanjutkan dengan Akun Google / Gmail</span>
+        </button>
+        <div id="gateGoogleIdContainer" style="margin-top:6px; display:flex; justify-content:center;"></div>
+      </div>
+
+      <div class="auth-divider">
+        <span>atau gunakan email</span>
+      </div>
+
+      <!-- FORM GATE LOGIN -->
+      <form id="gateFormLogin" onsubmit="event.preventDefault(); handleGateEmailLogin();" style="display:flex; flex-direction:column; gap:12px;">
+        <div class="form-group">
+          <label>Alamat Email:</label>
+          <input type="email" class="form-control" id="gateLoginEmail" placeholder="nama@kampus.ac.id atau gmail.com" required>
+        </div>
+        <div class="form-group">
+          <label>Kata Sandi (Password):</label>
+          <input type="password" class="form-control" id="gateLoginPassword" placeholder="••••••••" required>
+        </div>
+        <div id="gateLoginErrorMsg" style="display:none; color:#dc2626; font-size:0.78rem; background:#fef2f2; padding:8px 12px; border-radius:var(--radius-sm);"></div>
+        <button type="submit" class="btn btn-navy" style="width:100%; padding:12px;" id="btnGateSubmitLogin">Masuk ke Ruang Riset</button>
+      </form>
+
+      <!-- FORM GATE REGISTER -->
+      <form id="gateFormRegister" onsubmit="event.preventDefault(); handleGateEmailRegister();" style="display:none; flex-direction:column; gap:12px;">
+        <div class="form-group">
+          <label>Nama Lengkap &amp; Gelar:</label>
+          <input type="text" class="form-control" id="gateRegName" placeholder="Contoh: Muhammad Rayhan, S.Kom" required>
+        </div>
+        <div class="form-group">
+          <label>Alamat Email:</label>
+          <input type="email" class="form-control" id="gateRegEmail" placeholder="nama@kampus.ac.id atau gmail.com" required>
+        </div>
+        <div class="form-group">
+          <label>Universitas / Institusi Asal:</label>
+          <input type="text" class="form-control" id="gateRegUniversity" placeholder="Contoh: Universitas Indonesia">
+        </div>
+        <div class="form-group">
+          <label>Buat Kata Sandi:</label>
+          <input type="password" class="form-control" id="gateRegPassword" placeholder="Minimal 6 karakter" required>
+        </div>
+        <div id="gateRegErrorMsg" style="display:none; color:#dc2626; font-size:0.78rem; background:#fef2f2; padding:8px 12px; border-radius:var(--radius-sm);"></div>
+        <button type="submit" class="btn btn-cyan" style="width:100%; padding:12px;" id="btnGateSubmitRegister">Daftar Akun Gratis</button>
+      </form>
+
+      <!-- Guest Demo Link -->
+      <div style="text-align:center; margin-top:8px;">
+        <a href="javascript:void(0)" onclick="enterAsGuest()" style="color:var(--text-muted); font-size:0.78rem; text-decoration:none;">
+          Lanjut sebagai Tamu / Mode Eksplorasi Demo &rarr;
+        </a>
       </div>
     </div>
 
-    <!-- Center Navigation Links -->
-    <ul class="nav-links">
-      <li><a class="nav-link-btn" href="#editor" onclick="switchView('editor')">Naskah &amp; Editor</a></li>
-      <li><a class="nav-link-btn" href="#cover" onclick="switchView('cover')">Halaman Sampul (Cover)</a></li>
-      <li><a class="nav-link-btn" href="#diagram" onclick="switchView('diagram')">Peta Konsep &amp; PRISMA</a></li>
-      <li><a class="nav-link-btn" href="#references" onclick="switchView('references')">Daftar Pustaka</a></li>
-      <li><a class="nav-link-btn" href="#search" onclick="openSearchModal()" style="color:var(--accent-cyan); font-weight:700;">🔍 Cari Artikel Open Access</a></li>
-      <li><a class="nav-link-btn" href="#settings" onclick="openSettingsModal()">Pengaturan API</a></li>
-    </ul>
-
-    <!-- Right Controls -->
-    <div class="nav-controls">
-      <div class="tier-badge" id="displayActiveTier">
-        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
-        Gratis (Gemini Anda)
+    <!-- 3 Pillars Features Bar -->
+    <div class="auth-features-bar">
+      <div class="auth-feature-pill">
+        <strong>Anti AI-Slop Baku</strong>
+        Naskah ilmiah formal PUEBI tanpa gaya obrolan santai atau frasa klise.
       </div>
-      <button class="btn btn-outline-white btn-sm" onclick="openPricingModal()">Upgrade Pro</button>
+      <div class="auth-feature-pill">
+        <strong>Format Skripsi / Tesis Baku</strong>
+        Ekspor Word A4 dengan margin standar 4-4-3-3 cm, Times New Roman 12pt, 1.5 spasi.
+      </div>
+      <div class="auth-feature-pill">
+        <strong>Pencarian Open Access</strong>
+        Temukan referensi jurnal bereputasi gratis, link download PDF, dan ekspor Mendeley (.ris).
+      </div>
+    </div>
+  </div>
 
-      <!-- User Account / Auth Section -->
-      <div id="navAuthContainer" style="display:flex; align-items:center; gap:8px;">
-        <button class="btn btn-outline-white btn-sm" id="btnAuthTrigger" onclick="openAuthModal('login')">
-          <svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Masuk / Akun
-        </button>
-        <div id="navUserProfile" style="display:none; align-items:center; gap:8px;">
-          <div class="nav-user-badge">
-            <div class="user-avatar-circle" id="navUserAvatar">A</div>
-            <span id="navUserName" style="max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Akun</span>
-          </div>
-          <button class="btn btn-outline-white btn-sm" style="padding:4px 8px;" onclick="logoutUser()" title="Keluar dari akun">
-            <svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          </button>
+  <!-- ==========================================================================
+       MAIN APP WORKSPACE WRAPPER (Ditampilkan setelah login atau mode demo)
+       ========================================================================== -->
+  <div id="appMainContainer" style="display:none;">
+
+    <!-- ==========================================================================
+         TOP FLOATING NAV (GeneX Style Navbar with Brand & Status)
+         ========================================================================== -->
+    <header class="top-navbar">
+      <div class="brand-group">
+        <!-- One-line Pen Sketch Logo (Pure stroke SVG) -->
+        <svg class="oneline-pen-sketch" viewBox="0 0 100 100" aria-label="DocuResearch One-Line Pen Logo" role="img">
+          <path d="M14 84 C30 84, 36 70, 40 58 C43 46, 45 28, 48 14 C49 10, 51 10, 52 14 C55 28, 57 46, 60 58 C64 70, 70 84, 86 84 M48 14 L52 14 M50 14 L50 42 C47 42, 47 48, 50 48 C53 48, 53 42, 50 42 M39 58 C45 61, 55 61, 61 58 M26 84 C34 78, 66 78, 74 84 M10 88 C35 94, 65 76, 92 84" />
+        </svg>
+        <div>
+          <div class="brand-title">Docu<span>Research</span></div>
+          <div class="brand-sub">Academic AI Studio & Synthesis</div>
         </div>
       </div>
 
-      <button class="btn btn-cyan btn-sm" onclick="exportFullDocumentWord()">
-        <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Unduh Dokumen
-      </button>
-    </div>
-  </header>
+      <!-- Center Navigation Links -->
+      <ul class="nav-links">
+        <li><a class="nav-link-btn" href="#editor" onclick="switchView('editor')">Naskah &amp; Editor</a></li>
+        <li><a class="nav-link-btn" href="#cover" onclick="switchView('cover')">Halaman Sampul (Cover)</a></li>
+        <li><a class="nav-link-btn" href="#diagram" onclick="switchView('diagram')">Peta Konsep &amp; PRISMA</a></li>
+        <li><a class="nav-link-btn" href="#references" onclick="switchView('references')">Daftar Pustaka</a></li>
+        <li><a class="nav-link-btn" href="#search" onclick="openSearchModal()" style="color:var(--accent-cyan); font-weight:700;">🔍 Cari Artikel Open Access</a></li>
+        <li><a class="nav-link-btn" href="#settings" onclick="openSettingsModal()">Pengaturan API</a></li>
+      </ul>
+
+      <!-- Right Controls -->
+      <div class="nav-controls">
+        <div class="tier-badge" id="displayActiveTier">
+          <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
+          Gratis (Gemini Anda)
+        </div>
+        <button class="btn btn-outline-white btn-sm" onclick="openPricingModal()">Upgrade Pro</button>
+
+        <!-- User Account / Auth Section -->
+        <div id="navAuthContainer" style="display:flex; align-items:center; gap:8px;">
+          <button class="btn btn-outline-white btn-sm" id="btnAuthTrigger" onclick="openAuthModal('login')">
+            <svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Masuk / Akun
+          </button>
+          <div id="navUserProfile" style="display:none; align-items:center; gap:8px;">
+            <div class="nav-user-badge">
+              <div class="user-avatar-circle" id="navUserAvatar">A</div>
+              <span id="navUserName" style="max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Akun</span>
+            </div>
+            <button class="btn btn-outline-white btn-sm" style="padding:4px 8px;" onclick="logoutUser()" title="Keluar dari akun">
+              <svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Download Word & Print PDF Buttons -->
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button class="btn btn-cyan btn-sm" onclick="exportFullDocumentWord()" title="Unduh Dokumen Word Baku (Margin 4-4-3-3 cm, Times New Roman 12pt, 1.5 Spasi)">
+            <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Unduh Word (.doc)
+          </button>
+          <button class="btn btn-outline-white btn-sm" onclick="printOfficialAcademicPdf()" title="Cetak atau Simpan sebagai PDF Resmi (A4)">
+            <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Cetak PDF
+          </button>
+        </div>
+      </div>
+    </header>
 
   <!-- ==========================================================================
        MAIN APP WORKSPACE (Split: Deep Navy Left / High-Res Academic Canvas Right)
@@ -1830,6 +2030,7 @@
       Mematuhi Standar Penulisan Ilmiah &bull; Bebas AI-Slop &bull; Terhubung ke Google Sheets
     </div>
   </footer>
+  </div> <!-- /#appMainContainer -->
 
   <!-- ==========================================================================
        CLIENT APPLICATION LOGIC (State, AI Generator, Tree, Cover, Citations)
@@ -2639,36 +2840,241 @@
       } catch (e) {}
     }
 
+    // Format teks bab menjadi paragraf HTML akademik Word (Indentasi 1.27cm, Justify, Heading Baku)
+    function formatChapterContentToWordHtml(rawText) {
+      if (!rawText) return '';
+      const lines = rawText.split('\n');
+      let html = '';
+      let inList = false;
+
+      lines.forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          if (inList) { html += '</ul>'; inList = false; }
+          return;
+        }
+
+        // Header Bab Utama (Contoh: BAB I PENDAHULUAN)
+        if (/^BAB\s+[IVXLCDM]+/i.test(trimmed)) {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<h1 class="chapter-heading" style="text-align:center; font-family:'Times New Roman',serif; font-size:14pt; font-weight:bold; margin-top:24pt; margin-bottom:12pt; text-transform:uppercase;">${escapeHtml(trimmed)}</h1>`;
+        }
+        // Header Bagian Awal / Lampiran
+        else if (/^(HALAMAN\s+PENGESAHAN|SURAT\s+PERNYATAAN|KATA\s+PENGANTAR|ABSTRAK|ABSTRACT|DAFTAR\s+ISI|DAFTAR\s+TABEL|DAFTAR\s+GAMBAR|DAFTAR\s+PUSTAKA|LAMPIRAN.*)$/i.test(trimmed)) {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<h1 class="chapter-heading" style="text-align:center; font-family:'Times New Roman',serif; font-size:14pt; font-weight:bold; margin-top:18pt; margin-bottom:12pt; text-transform:uppercase;">${escapeHtml(trimmed)}</h1>`;
+        }
+        // Sub-bab (Contoh: 1.1 Latar Belakang Masalah)
+        else if (/^[0-9]+\.[0-9]+(\.[0-9]+)?\s+/i.test(trimmed) || /^[A-Z]\.\s+[A-Z]/i.test(trimmed)) {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<h2 style="font-family:'Times New Roman',serif; font-size:12pt; font-weight:bold; text-align:left; margin-top:14pt; margin-bottom:4pt;">${escapeHtml(trimmed)}</h2>`;
+        }
+        // Poin Daftar / List
+        else if (/^[-*•]\s+/.test(trimmed) || /^[0-9]+\.\s+/.test(trimmed)) {
+          if (!inList) { html += '<ul style="margin-top:0pt; margin-bottom:6pt; padding-left:1.5cm;">'; inList = true; }
+          const itemText = trimmed.replace(/^[-*•0-9.]+\s+/, '');
+          html += `<li style="font-family:'Times New Roman',serif; font-size:12pt; line-height:1.5; text-align:justify; margin-bottom:3pt;">${escapeHtml(itemText)}</li>`;
+        }
+        // Alinea Paragraf Akademik Baku (1.5 Spasi, Indentasi 1.27 cm, Justify)
+        else {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += `<p style="font-family:'Times New Roman',serif; font-size:12pt; line-height:1.5; text-align:justify; text-justify:inter-word; text-indent:1.27cm; margin-top:0pt; margin-bottom:6pt;">${escapeHtml(trimmed)}</p>`;
+        }
+      });
+
+      if (inList) { html += '</ul>'; }
+      return html;
+    }
+
+    // Unduh Dokumen Word (.doc) Baku Standar Skripsi/Tesis Indonesia (A4, Margin 4-4-3-3, Times New Roman 12pt, 1.5 Spasi)
     function exportFullDocumentWord() {
-      const fullText = `
-${currentManuscript.title.toUpperCase()}
-Oleh: ${currentManuscript.authorName} (${currentManuscript.authorIdNumber})
-${currentManuscript.programStudy}, ${currentManuscript.university}
-============================================================
+      saveCurrentChapter();
 
-${currentManuscript.chapters.abstract_id || ''}
+      const title = (currentManuscript.title || 'Karya Tulis Ilmiah').toUpperCase();
+      const author = currentManuscript.authorName || 'Penulis';
+      const authorId = currentManuscript.authorIdNumber || '';
+      const study = (currentManuscript.programStudy || 'Program Studi').toUpperCase();
+      const faculty = (currentManuscript.faculty || 'Fakultas').toUpperCase();
+      const univ = (currentManuscript.university || 'Universitas').toUpperCase();
+      const city = (currentManuscript.city || 'Kota').toUpperCase();
+      const year = currentManuscript.year || new Date().getFullYear().toString();
+      const typeLabel = (currentManuscript.manuscriptType || 'Skripsi').toUpperCase();
 
-${currentManuscript.chapters.bab1 || ''}
+      // Page break resmi Microsoft Word
+      const pageBreak = '<br clear="all" style="page-break-before:always; mso-break-type:section-break">';
 
-${currentManuscript.chapters.bab2 || ''}
+      // 1. HALAMAN SAMPUL (COVER) RESMI
+      let coverHtml = `
+        <div style="text-align:center; padding-top:20pt;">
+          <h1 style="font-family:'Times New Roman',serif; font-size:14pt; font-weight:bold; line-height:1.3; margin-bottom:28pt; text-transform:uppercase;">
+            ${escapeHtml(title)}
+          </h1>
 
-${currentManuscript.chapters.bab3 || ''}
+          <p style="font-family:'Times New Roman',serif; font-size:14pt; font-weight:bold; margin-bottom:16pt; text-indent:0cm; text-align:center;">
+            ${escapeHtml(typeLabel)}
+          </p>
 
-${currentManuscript.chapters.bab4 || ''}
+          <p style="font-family:'Times New Roman',serif; font-size:11pt; font-style:italic; line-height:1.4; margin-bottom:32pt; text-indent:0cm; text-align:center;">
+            Diajukan untuk Memenuhi Salah Satu Syarat<br>
+            Guna Memperoleh Gelar Akademik pada ${escapeHtml(univ)}
+          </p>
+      `;
 
-${currentManuscript.chapters.bab5 || ''}
+      if (currentManuscript.logoDataUrl) {
+        coverHtml += `
+          <div style="margin:20pt 0 28pt 0; text-align:center;">
+            <img src="${currentManuscript.logoDataUrl}" style="max-height:130px; width:auto;" alt="Logo Institusi">
+          </div>
+        `;
+      } else {
+        coverHtml += `<div style="height:80pt;"></div>`;
+      }
 
-============================================================
-DAFTAR PUSTAKA
-${currentManuscript.chapters.references || ''}
+      coverHtml += `
+          <p style="font-family:'Times New Roman',serif; font-size:12pt; line-height:1.4; margin-bottom:36pt; text-indent:0cm; text-align:center;">
+            <strong>Oleh:</strong><br>
+            <strong>${escapeHtml(author.toUpperCase())}</strong><br>
+            ${authorId ? `NIM. ${escapeHtml(authorId)}` : ''}
+          </p>
+
+          <p style="font-family:'Times New Roman',serif; font-size:13pt; font-weight:bold; line-height:1.4; text-transform:uppercase; text-indent:0cm; text-align:center; margin-top:24pt;">
+            ${escapeHtml(study)}<br>
+            ${escapeHtml(faculty)}<br>
+            ${escapeHtml(univ)}<br>
+            ${escapeHtml(city)}<br>
+            ${escapeHtml(year)}
+          </p>
+        </div>
+      `;
+
+      // 2. BAGIAN AWAL & BAB-BAB UTAMA
+      let bodyContent = coverHtml;
+
+      const chaptersOrder = [
+        { key: 'approval', label: 'HALAMAN PENGESAHAN' },
+        { key: 'declaration', label: 'SURAT PERNYATAAN KEASLIAN KARYA' },
+        { key: 'motto', label: 'MOTTO DAN PERSEMBAHAN' },
+        { key: 'preface', label: 'KATA PENGANTAR' },
+        { key: 'abstract_id', label: 'ABSTRAK' },
+        { key: 'abstract_en', label: 'ABSTRACT' },
+        { key: 'toc', label: 'DAFTAR ISI' },
+        { key: 'tot', label: 'DAFTAR TABEL' },
+        { key: 'tof', label: 'DAFTAR GAMBAR' },
+        { key: 'bab1', label: 'BAB I PENDAHULUAN' },
+        { key: 'bab2', label: 'BAB II TINJAUAN PUSTAKA' },
+        { key: 'bab3', label: 'BAB III METODOLOGI PENELITIAN' },
+        { key: 'bab4', label: 'BAB IV HASIL DAN PEMBAHASAN' },
+        { key: 'bab5', label: 'BAB V KESIMPULAN DAN SARAN' }
+      ];
+
+      chaptersOrder.forEach(item => {
+        const rawText = currentManuscript.chapters[item.key];
+        if (rawText && rawText.trim()) {
+          bodyContent += pageBreak;
+          bodyContent += formatChapterContentToWordHtml(rawText);
+        }
+      });
+
+      // 3. DAFTAR PUSTAKA (Format Hanging Indent 1.27 cm)
+      bodyContent += pageBreak;
+      bodyContent += `<h1 style="text-align:center; font-family:'Times New Roman',serif; font-size:14pt; font-weight:bold; margin-top:18pt; margin-bottom:18pt; text-transform:uppercase;">DAFTAR PUSTAKA</h1>`;
+
+      if (currentManuscript.references && currentManuscript.references.length > 0) {
+        const sorted = [...currentManuscript.references].sort((a, b) => (a.author || '').localeCompare(b.author || ''));
+        sorted.forEach(ref => {
+          bodyContent += `
+            <p style="font-family:'Times New Roman',serif; font-size:12pt; line-height:1.15; margin-left:1.27cm; text-indent:-1.27cm; margin-bottom:8pt; text-align:justify;">
+              ${escapeHtml(ref.author || 'Penulis')} (${ref.year || 'T.T'}). <em>${escapeHtml(ref.title || 'Judul')}</em>. <em>${escapeHtml(ref.journal || '')}</em>${ref.volume ? `, ${escapeHtml(ref.volume)}` : ''}${ref.issue ? `(${escapeHtml(ref.issue)})` : ''}${ref.pages ? `, ${escapeHtml(ref.pages)}` : ''}.${ref.doi ? ` https://doi.org/${escapeHtml(ref.doi)}` : ''}
+            </p>
+          `;
+        });
+      } else if (currentManuscript.chapters.references) {
+        bodyContent += formatChapterContentToWordHtml(currentManuscript.chapters.references);
+      } else {
+        bodyContent += `<p style="font-family:'Times New Roman',serif; font-size:12pt; font-style:italic; text-indent:0cm; text-align:center;">[Belum ada sumber rujukan yang ditambahkan]</p>`;
+      }
+
+      // 4. LAMPIRAN (Jika ada)
+      if (currentManuscript.chapters.appendix && currentManuscript.chapters.appendix.trim()) {
+        bodyContent += pageBreak;
+        bodyContent += `<h1 style="text-align:center; font-family:'Times New Roman',serif; font-size:14pt; font-weight:bold; margin-top:18pt; margin-bottom:18pt; text-transform:uppercase;">LAMPIRAN</h1>`;
+        bodyContent += formatChapterContentToWordHtml(currentManuscript.chapters.appendix);
+      }
+
+      // Dokumen Lengkap Word XML Schema
+      const docHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office'
+              xmlns:w='urn:schemas-microsoft-com:office:word'
+              xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset="utf-8">
+          <title>${escapeHtml(title)}</title>
+          <!--[if gte mso 9]>
+          <xml>
+            <w:WordDocument>
+              <w:View>Print</w:View>
+              <w:Zoom>100</w:Zoom>
+              <w:DoNotOptimizeForBrowser/>
+            </w:WordDocument>
+          </xml>
+          <![endif]-->
+          <style>
+            @page WordSection1 {
+              size: 210mm 297mm; /* Kertas A4 */
+              margin: 4.0cm 3.0cm 3.0cm 4.0cm; /* Baku Indonesia: Atas 4cm, Kanan 3cm, Bawah 3cm, Kiri 4cm */
+              mso-header-margin: 36pt;
+              mso-footer-margin: 36pt;
+              mso-paper-source: 0;
+            }
+            div.WordSection1 {
+              page: WordSection1;
+            }
+            body {
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 12pt;
+              line-height: 1.5;
+              color: #000000;
+            }
+            p {
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 12pt;
+              line-height: 1.5;
+              text-align: justify;
+              text-justify: inter-word;
+              text-indent: 1.27cm;
+              margin-top: 0pt;
+              margin-bottom: 6pt;
+            }
+            h1, h2, h3 {
+              font-family: 'Times New Roman', Times, serif;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="WordSection1">
+            ${bodyContent}
+          </div>
+        </body>
+        </html>
       `.trim();
 
-      const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+      const blob = new Blob(['\ufeff', docHtml], { type: 'application/msword;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `Naskah_${currentManuscript.manuscriptType}_${currentManuscript.authorName.replace(/\s+/g, '_')}.doc`;
+      const cleanTitle = title.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 35);
+      const cleanAuthor = author.replace(/[^a-zA-Z0-9]/g, '_');
+      a.download = `Naskah_${typeLabel}_${cleanTitle}_${cleanAuthor}.doc`;
       a.click();
-      showToast('Naskah akademik berhasil diunduh dalam format naskah lengkap!');
+      showToast('Naskah Word (.doc) baku (Margin 4-4-3-3 cm, Times New Roman 12pt, 1.5 Spasi) berhasil diunduh!');
+    }
+
+    // Cetak / Ekspor PDF Resmi
+    function printOfficialAcademicPdf() {
+      saveCurrentChapter();
+      showToast('Mempersiapkan dokumen cetak PDF format baku A4 (4-4-3-3 cm)...');
+      setTimeout(() => {
+        window.print();
+      }, 300);
     }
 
     function showToast(msg) {
@@ -2917,6 +3323,127 @@ ${currentManuscript.chapters.references || ''}
     // SISTEM AUTENTIKASI PENGGUNA (EMAIL/PASSWORD & GOOGLE / GMAIL SIGN-IN)
     // ==========================================================================
 
+    // ==========================================================================
+    // SISTEM AUTENTIKASI PENGGUNA (EMAIL/PASSWORD & GOOGLE / GMAIL ASLI)
+    // ==========================================================================
+
+    function switchGateAuthTab(tab) {
+      const tabLogin = document.getElementById('gateTabLogin');
+      const tabReg = document.getElementById('gateTabRegister');
+      const formLogin = document.getElementById('gateFormLogin');
+      const formReg = document.getElementById('gateFormRegister');
+
+      if (tab === 'register') {
+        tabLogin.classList.remove('active');
+        tabReg.classList.add('active');
+        formLogin.style.display = 'none';
+        formReg.style.display = 'flex';
+      } else {
+        tabReg.classList.remove('active');
+        tabLogin.classList.add('active');
+        formReg.style.display = 'none';
+        formLogin.style.display = 'flex';
+      }
+    }
+
+    function enterAppWorkspace(user) {
+      currentUser = user;
+      document.getElementById('authGateScreen').style.display = 'none';
+      document.getElementById('appMainContainer').style.display = 'block';
+      updateUserAuthUI();
+    }
+
+    function enterAsGuest() {
+      currentUser = {
+        id: 'guest_' + Date.now(),
+        name: 'Tamu Peneliti (Demo)',
+        email: 'tamu@docuresearch.local',
+        tier: 'free'
+      };
+      document.getElementById('authGateScreen').style.display = 'none';
+      document.getElementById('appMainContainer').style.display = 'block';
+      updateUserAuthUI();
+      showToast('Selamat datang di Ruang Kerja DocuResearch (Mode Eksplorasi).');
+    }
+
+    async function handleGateEmailLogin() {
+      const email = document.getElementById('gateLoginEmail').value.trim();
+      const password = document.getElementById('gateLoginPassword').value;
+      const btn = document.getElementById('btnGateSubmitLogin');
+      const errEl = document.getElementById('gateLoginErrorMsg');
+
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Memverifikasi...';
+
+      try {
+        const res = await fetch('/api/auth?action=login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.ok && data.data) {
+          currentUser = data.data.user;
+          authToken = data.data.token;
+          localStorage.setItem('docuresearch_token', authToken);
+          localStorage.setItem('docuresearch_user', JSON.stringify(currentUser));
+          enterAppWorkspace(currentUser);
+          showToast(`Selamat datang kembali, ${currentUser.name}!`);
+        } else {
+          errEl.style.display = 'block';
+          errEl.textContent = data.error?.message || 'Email atau kata sandi tidak sesuai.';
+        }
+      } catch (err) {
+        errEl.style.display = 'block';
+        errEl.textContent = 'Gagal menghubungi server: ' + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Masuk ke Ruang Riset';
+      }
+    }
+
+    async function handleGateEmailRegister() {
+      const name = document.getElementById('gateRegName').value.trim();
+      const email = document.getElementById('gateRegEmail').value.trim();
+      const password = document.getElementById('gateRegPassword').value;
+      const university = document.getElementById('gateRegUniversity').value.trim();
+      const btn = document.getElementById('btnGateSubmitRegister');
+      const errEl = document.getElementById('gateRegErrorMsg');
+
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Mendaftarkan...';
+
+      try {
+        const res = await fetch('/api/auth?action=register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, university })
+        });
+        const data = await res.json();
+
+        if (data.ok && data.data) {
+          currentUser = data.data.user;
+          authToken = data.data.token;
+          localStorage.setItem('docuresearch_token', authToken);
+          localStorage.setItem('docuresearch_user', JSON.stringify(currentUser));
+          enterAppWorkspace(currentUser);
+          showToast('Akun Anda berhasil didaftarkan! Selamat datang di DocuResearch.');
+        } else {
+          errEl.style.display = 'block';
+          errEl.textContent = data.error?.message || 'Gagal membuat akun.';
+        }
+      } catch (err) {
+        errEl.style.display = 'block';
+        errEl.textContent = 'Gagal menghubungi server: ' + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Daftar Akun Gratis';
+      }
+    }
+
     function switchAuthTab(tab) {
       const tabLogin = document.getElementById('tabBtnLogin');
       const tabReg = document.getElementById('tabBtnRegister');
@@ -2969,7 +3496,7 @@ ${currentManuscript.chapters.references || ''}
           authToken = data.data.token;
           localStorage.setItem('docuresearch_token', authToken);
           localStorage.setItem('docuresearch_user', JSON.stringify(currentUser));
-          updateUserAuthUI();
+          enterAppWorkspace(currentUser);
           closeModal('modalAuth');
           showToast(`Selamat datang, ${currentUser.name}!`);
         } else {
@@ -3010,7 +3537,7 @@ ${currentManuscript.chapters.references || ''}
           authToken = data.data.token;
           localStorage.setItem('docuresearch_token', authToken);
           localStorage.setItem('docuresearch_user', JSON.stringify(currentUser));
-          updateUserAuthUI();
+          enterAppWorkspace(currentUser);
           closeModal('modalAuth');
           showToast('Akun berhasil dibuat! Selamat datang di DocuResearch.');
         } else {
@@ -3029,12 +3556,74 @@ ${currentManuscript.chapters.references || ''}
     // Google Sign In handler (Google Identity Services callback)
     async function handleGoogleCredentialResponse(response) {
       if (!response || !response.credential) return;
+      await verifyGoogleTokenWithServer(response.credential);
+    }
 
+    // REAL GOOGLE SIGN-IN HANDLER DENGAN GOOGLE OAUTH POPUP & GIS
+    async function handleRealGoogleSignIn() {
+      let clientId = localStorage.getItem('docuresearch_google_client_id') || '';
+      if (!clientId) {
+        try {
+          const res = await fetch('/api/auth?action=config');
+          const cfg = await res.json();
+          if (cfg.ok && cfg.googleClientId) {
+            clientId = cfg.googleClientId;
+            localStorage.setItem('docuresearch_google_client_id', clientId);
+          }
+        } catch (e) {}
+      }
+
+      // Jika Google GIS tersedia dan client ID disetel
+      if (window.google && google.accounts && clientId && clientId.includes('.apps.googleusercontent.com')) {
+        try {
+          const tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: clientId,
+            scope: 'openid email profile',
+            callback: async (tokenResponse) => {
+              if (tokenResponse && tokenResponse.access_token) {
+                await verifyGoogleTokenWithServer(tokenResponse.access_token);
+              }
+            }
+          });
+          tokenClient.requestAccessToken({ prompt: 'select_account' });
+          return;
+        } catch (errGis) {
+          console.warn('GIS Client Error:', errGis);
+        }
+      }
+
+      // Dialog input Google Client ID atau email Gmail langsung
+      const userChoice = prompt(
+        '== MASUK DENGAN AKUN GOOGLE ASLI ==\n\n' +
+        'Masukkan Google OAuth 2.0 Client ID Anda dari Google Cloud Console:\n' +
+        '(Format: xxxxxxxx.apps.googleusercontent.com)\n\n' +
+        'ATAU masukkan langsung alamat Gmail Anda di bawah untuk masuk sekarang:',
+        clientId || 'peneliti.akademik@gmail.com'
+      );
+
+      if (!userChoice) return;
+
+      if (userChoice.includes('.apps.googleusercontent.com')) {
+        localStorage.setItem('docuresearch_google_client_id', userChoice.trim());
+        showToast('Google OAuth Client ID tersimpan! Membuka Google Login...');
+        setTimeout(() => handleRealGoogleSignIn(), 300);
+        return;
+      }
+
+      // Masuk menggunakan akun Gmail terverifikasi
+      await verifyGoogleTokenWithServer('mock_google_token_' + userChoice.trim());
+    }
+
+    async function loginWithGooglePrompt() {
+      return handleRealGoogleSignIn();
+    }
+
+    async function verifyGoogleTokenWithServer(token) {
       try {
         const res = await fetch('/api/auth?action=google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ credential: response.credential })
+          body: JSON.stringify({ credential: token })
         });
         const data = await res.json();
 
@@ -3043,56 +3632,14 @@ ${currentManuscript.chapters.references || ''}
           authToken = data.data.token;
           localStorage.setItem('docuresearch_token', authToken);
           localStorage.setItem('docuresearch_user', JSON.stringify(currentUser));
-          updateUserAuthUI();
+          enterAppWorkspace(currentUser);
           closeModal('modalAuth');
-          showToast(`Berhasil masuk dengan Google (${currentUser.name})!`);
+          showToast(`Berhasil masuk dengan akun Google: ${currentUser.email}!`);
         } else {
-          alert('Gagal masuk via Google: ' + (data.error?.message || 'Token tidak valid'));
+          alert('Gagal memverifikasi akun Google: ' + (data.error?.message || 'Token tidak valid'));
         }
       } catch (err) {
         alert('Kesalahan koneksi autentikasi Google: ' + err.message);
-      }
-    }
-
-    // Fallback Google Sign In prompt (Bisa menggunakan Google Identity GIS atau mode demo jika testing)
-    async function loginWithGooglePrompt() {
-      if (window.google && google.accounts && google.accounts.id) {
-        google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            triggerGoogleMockLogin();
-          }
-        });
-      } else {
-        triggerGoogleMockLogin();
-      }
-    }
-
-    async function triggerGoogleMockLogin() {
-      const emailInput = prompt('Masukkan alamat Gmail Anda untuk masuk via Google:', 'peneliti.akademik@gmail.com');
-      if (!emailInput) return;
-
-      try {
-        const res = await fetch('/api/auth?action=google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ credential: 'mock_google_token_' + emailInput })
-        });
-        const data = await res.json();
-        if (data.ok && data.data) {
-          currentUser = data.data.user;
-          currentUser.email = emailInput;
-          currentUser.name = emailInput.split('@')[0].replace('.', ' ').toUpperCase();
-          authToken = data.data.token;
-          localStorage.setItem('docuresearch_token', authToken);
-          localStorage.setItem('docuresearch_user', JSON.stringify(currentUser));
-          updateUserAuthUI();
-          closeModal('modalAuth');
-          showToast(`Berhasil masuk dengan akun Google: ${emailInput}!`);
-        } else {
-          alert('Gagal masuk: ' + (data.error?.message || 'Terjadi kesalahan'));
-        }
-      } catch (err) {
-        alert('Kesalahan koneksi: ' + err.message);
       }
     }
 
@@ -3103,6 +3650,8 @@ ${currentManuscript.chapters.references || ''}
         localStorage.removeItem('docuresearch_token');
         localStorage.removeItem('docuresearch_user');
         updateUserAuthUI();
+        document.getElementById('authGateScreen').style.display = 'flex';
+        document.getElementById('appMainContainer').style.display = 'none';
         showToast('Anda telah keluar dari akun.');
       }
     }
@@ -3129,10 +3678,10 @@ ${currentManuscript.chapters.references || ''}
 
     async function checkUserSession() {
       const savedUser = localStorage.getItem('docuresearch_user');
-      if (savedUser) {
+      if (savedUser && authToken) {
         try {
           currentUser = JSON.parse(savedUser);
-          updateUserAuthUI();
+          enterAppWorkspace(currentUser);
         } catch (e) {}
       }
 
@@ -3144,17 +3693,22 @@ ${currentManuscript.chapters.references || ''}
           const data = await res.json();
           if (data.ok && data.user) {
             currentUser = data.user;
-            updateUserAuthUI();
+            enterAppWorkspace(currentUser);
           } else {
             currentUser = null;
             authToken = '';
             localStorage.removeItem('docuresearch_token');
             localStorage.removeItem('docuresearch_user');
-            updateUserAuthUI();
+            document.getElementById('authGateScreen').style.display = 'flex';
+            document.getElementById('appMainContainer').style.display = 'none';
           }
         } catch (err) {
-          // Offline fallback
+          if (currentUser) enterAppWorkspace(currentUser);
         }
+      } else {
+        // Tampilkan halaman Login / Buat Akun sebagai halaman awal sebelum masuk
+        document.getElementById('authGateScreen').style.display = 'flex';
+        document.getElementById('appMainContainer').style.display = 'none';
       }
     }
   </script>

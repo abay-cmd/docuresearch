@@ -21,6 +21,14 @@ module.exports = async (req, res) => {
 
   const action = (req.query && req.query.action) || 'me';
 
+  // GET: Konfigurasi autentikasi publik (Client ID Google)
+  if (req.method === 'GET' && action === 'config') {
+    return res.status(200).json({
+      ok: true,
+      googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+    });
+  }
+
   // GET: Cek sesi akun yang sedang aktif
   if (req.method === 'GET' && action === 'me') {
     const authHeader = req.headers['authorization'] || '';
