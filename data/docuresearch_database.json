@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "appName": "DocuResearch Academic Database",
+    "lastUpdated": "2026-11-10T09:34:36.011Z",
+    "totalManuscripts": 1
+  },
+  "manuscripts": [
+    {
+      "id": "doc_sample_01",
+      "title": "Pengembangan Model Prediksi Risiko Akademik Menggunakan Algoritma Machine Learning Teroptimasi",
+      "manuscriptType": "tesis",
+      "authorName": "Ahmad Fauzan, S.Kom",
+      "authorIdNumber": "2208107010045",
+      "programStudy": "Magister Ilmu Komputer",
+      "faculty": "Fakultas Matematika dan Ilmu Pengetahuan Alam",
+      "university": "Universitas Indonesia",
+      "city": "Depok",
+      "year": "2026",
+      "supervisor1": "Prof. Dr. Ir. Hendra Kusuma, M.Eng.",
+      "supervisor2": "Dr. Eng. Dian Pratama, S.T., M.T.",
+      "pin": "1234",
+      "createdAt": "2026-11-10T09:34:36.010Z",
+      "updatedAt": "2026-11-10T09:34:36.011Z",
+      "chapters": {
+        "bab1": "1.1 Latar Belakang Masalah\nIntegrasi teknologi kecerdasan buatan dalam sektor pendidikan tinggi telah membuka peluang besar...",
+        "bab2": "2.1 Kajian Pustaka Terkait\nBerbagai literatur mutakhir mengkaji penerapan model prediksi performa akademik..."
+      },
+      "references": [
+        {
+          "id": "ref1",
+          "author": "Rahman, A., & Setiawan, B.",
+          "year": "2023",
+          "title": "Optimasi Model Pembelajaran Mesin untuk Prediksi Retensi Mahasiswa",
+          "journal": "Jurnal Sistem Informasi dan Informatika",
+          "volume": "15",
+          "issue": "2",
+          "pages": "112-125",
+          "doi": "10.1234/jsii.v15i2.5678"
+        },
+        {
+          "id": "ref2",
+          "author": "Kusuma, H., Pratama, D., & Chen, M.",
+          "year": "2022",
+          "title": "Adaptive Early Warning Systems in Higher Education: An Empirical Study",
+          "journal": "IEEE Transactions on Learning Technologies",
+          "volume": "8",
+          "issue": "4",
+          "pages": "340-352",
+          "doi": "10.1109/TLT.2022.314159"
+        }
+      ]
+    }
+  ]
+}

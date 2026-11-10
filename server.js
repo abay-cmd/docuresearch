@@ -13,6 +13,7 @@ const healthHandler = require('./api/health');
 const generateHandler = require('./api/generate');
 const projectsHandler = require('./api/projects');
 const referencesHandler = require('./api/references');
+const searchHandler = require('./api/search');
 
 function enhanceResponse(res) {
   res.status = function(code) {
@@ -80,6 +81,8 @@ const server = http.createServer(async (req, res) => {
         return await projectsHandler(req, res);
       } else if (pathname === '/api/references') {
         return await referencesHandler(req, res);
+      } else if (pathname === '/api/search') {
+        return await searchHandler(req, res);
       } else {
         return res.status(404).json({
           ok: false,

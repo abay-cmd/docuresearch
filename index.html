@@ -862,10 +862,11 @@
 
     <!-- Center Navigation Links -->
     <ul class="nav-links">
-      <li><a class="nav-link-btn" href="#editor" onclick="switchView('editor')">Naskah & Editor</a></li>
+      <li><a class="nav-link-btn" href="#editor" onclick="switchView('editor')">Naskah &amp; Editor</a></li>
       <li><a class="nav-link-btn" href="#cover" onclick="switchView('cover')">Halaman Sampul (Cover)</a></li>
-      <li><a class="nav-link-btn" href="#diagram" onclick="switchView('diagram')">Peta Konsep & PRISMA</a></li>
+      <li><a class="nav-link-btn" href="#diagram" onclick="switchView('diagram')">Peta Konsep &amp; PRISMA</a></li>
       <li><a class="nav-link-btn" href="#references" onclick="switchView('references')">Daftar Pustaka</a></li>
+      <li><a class="nav-link-btn" href="#search" onclick="openSearchModal()" style="color:var(--accent-cyan); font-weight:700;">🔍 Cari Artikel Open Access</a></li>
       <li><a class="nav-link-btn" href="#settings" onclick="openSettingsModal()">Pengaturan API</a></li>
     </ul>
 
@@ -1015,7 +1016,9 @@
             <button class="editor-tool-btn" onclick="insertEditorHeading(3)">H3</button>
             <button class="editor-tool-btn" onclick="insertEditorFormat('**', '**')"><strong>B</strong></button>
             <button class="editor-tool-btn" onclick="insertEditorFormat('*', '*')"><em>I</em></button>
-            <button class="editor-tool-btn" onclick="openInsertCitationModal()">+ Sitasi</button>
+            <button class="editor-tool-btn" onclick="openInsertCitationModal('bodynote')">+ Bodynote</button>
+            <button class="editor-tool-btn" onclick="openInsertCitationModal('footnote')">+ Footnote (Catatan Kaki)</button>
+            <button class="editor-tool-btn" onclick="openSearchModal()">🔍 Cari Jurnal Open Access</button>
             <button class="editor-tool-btn" onclick="insertAcademicTableTemplate()">+ Tabel Ilmiah</button>
             <button class="editor-tool-btn" onclick="insertConceptMapTemplate()">+ Peta Konsep</button>
             <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
@@ -1094,25 +1097,36 @@
 
       <!-- VIEW 4: AUTO CITATION & BIBLIOGRAPHY GENERATOR -->
       <div id="viewReferencesSection" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
           <div>
-            <h3>Daftar Pustaka &amp; Mesin Sitasi Otomatis</h3>
-            <p style="font-size:0.8rem; color:var(--text-muted);">Terurut abjad A-Z sesuai kaidah penulisan APA 7th, IEEE, atau Harvard</p>
+            <h3>Daftar Pustaka, Sitasi &amp; Ekspor File RIS</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Mendukung Bodynote, Footnote (Catatan Kaki), dan format ekspor .RIS untuk Mendeley/Zotero</p>
           </div>
-          <div style="display:flex; gap:10px;">
-            <select class="form-control" id="selectCitationStyle" style="width:160px;" onchange="updateCitationStyle()">
-              <option value="apa">APA 7th Edition</option>
-              <option value="ieee">IEEE Standard</option>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <select class="form-control" id="selectCitationStyle" style="width:220px;" onchange="updateCitationStyle()">
+              <option value="bodynote_apa">Bodynote (APA 7th Edition)</option>
+              <option value="bodynote_page">Bodynote (+ Nomor Halaman)</option>
+              <option value="footnote_chicago">Footnote / Catatan Kaki (Turabian/Chicago)</option>
+              <option value="ieee">IEEE Numerik [1]</option>
               <option value="harvard">Harvard Style</option>
             </select>
+            <button class="btn btn-secondary btn-sm" onclick="openSearchModal()">
+              🔍 Cari Jurnal Open Access
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="downloadRisFile()">
+              📥 Unduh File .RIS (Mendeley/Zotero)
+            </button>
             <button class="btn btn-cyan btn-sm" onclick="openAddReferenceModal()">+ Tambah Referensi</button>
           </div>
         </div>
 
         <div class="editor-container">
-          <div style="padding:16px; border-bottom:1px solid var(--border-subtle); display:flex; justify-content:space-between;">
-            <span style="font-weight:700; font-size:0.88rem;">Teks Daftar Pustaka Lengkap:</span>
-            <button class="btn btn-secondary btn-sm" onclick="copyBibliographyText()">Salin Daftar Pustaka</button>
+          <div style="padding:16px; border-bottom:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <span style="font-weight:700; font-size:0.88rem;">Format Teks Daftar Pustaka Lengkap:</span>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="downloadRisFile()">Unduh .RIS</button>
+              <button class="btn btn-secondary btn-sm" onclick="copyBibliographyText()">Salin Daftar Pustaka</button>
+            </div>
           </div>
           <textarea class="editor-textarea" id="bibliographyOutputArea" style="min-height:360px;" readonly></textarea>
         </div>
@@ -1328,7 +1342,91 @@
     </div>
   </div>
 
-  <!-- TOAST CONTAINER -->
+  <!-- ==========================================================================
+       MODAL: PENCARIAN ARTIKEL ILMIAH OPEN ACCESS (GRATIS & LINK DOWNLOAD)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalSearchArticles">
+    <div class="modal-box wide" style="max-width:960px;">
+      <div class="modal-header">
+        <div>
+          <h3>Pencarian Artikel Ilmiah Open Access (Gratis)</h3>
+          <p style="font-size:0.75rem; color:var(--text-light); margin-top:2px;">Temukan referensi jurnal bereputasi, akses link download PDF, dan tambahkan langsung ke naskah</p>
+        </div>
+        <button class="btn-icon" style="color:white; background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal('modalSearchArticles')">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:16px;">
+        <!-- Search Input Bar -->
+        <div style="display:flex; gap:10px;">
+          <input type="text" class="form-control" id="searchArticleQuery" placeholder="Ketik topik riset Anda... (contoh: machine learning education, data analytics, sistem informasi)" onkeypress="if(event.key==='Enter') executeArticleSearch()">
+          <button class="btn btn-cyan" onclick="executeArticleSearch()" id="btnExecuteSearch">
+            🔍 Cari Artikel
+          </button>
+        </div>
+
+        <!-- Quick Topic Suggestion Pills -->
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:0.75rem;">
+          <span style="color:var(--text-muted); font-weight:700;">Topik Cepat:</span>
+          <button class="btn btn-secondary btn-sm" onclick="quickSearchTopic('machine learning education')">Machine Learning</button>
+          <button class="btn btn-secondary btn-sm" onclick="quickSearchTopic('systematic literature review prisma')">SLR PRISMA</button>
+          <button class="btn btn-secondary btn-sm" onclick="quickSearchTopic('higher education information systems')">Sistem Informasi</button>
+          <button class="btn btn-secondary btn-sm" onclick="quickSearchTopic('deep learning biomedical')">Biomedis &amp; AI</button>
+        </div>
+
+        <!-- Search Status & Source indicator -->
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.76rem; color:var(--text-muted); padding:4px 0;">
+          <span id="searchStatusInfo">Menampilkan referensi Open Access terverifikasi:</span>
+          <span class="badge-pill" id="searchSourceBadge">OpenAlex / CrossRef Index</span>
+        </div>
+
+        <!-- Results List -->
+        <div id="searchResultsContainer" style="display:flex; flex-direction:column; gap:14px; max-height:460px; overflow-y:auto; padding-right:4px;">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalSearchArticles')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: SISIPKAN SITASI (BODYNOTE / FOOTNOTE / IEEE) KE DALAM EDITOR
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalInsertCitation">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalCitationTitle">Sisipkan Sitasi Ilmiah</h3>
+        <button class="btn-icon" style="color:white; background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal('modalInsertCitation')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Pilih Format Sitasi:</label>
+          <select class="form-control" id="selectInsertCitationType">
+            <option value="bodynote">Bodynote Standar (cth: (Rahman, 2023))</option>
+            <option value="bodynote_page">Bodynote dengan Halaman (cth: (Rahman, 2023: 45))</option>
+            <option value="footnote">Footnote / Catatan Kaki (Superscript ¹ + Catatan Kaki Bawah)</option>
+            <option value="ieee">IEEE Numerik (cth: [1])</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="groupCitationPage" style="display:none;">
+          <label>Nomor Halaman (opsional):</label>
+          <input type="text" class="form-control" id="inputCitationPageNum" placeholder="Misal: 45 atau 112-114">
+        </div>
+
+        <div class="form-group">
+          <label>Pilih Sumber Rujukan dari Daftar Pustaka Anda:</label>
+          <select class="form-control" id="selectCitationReference">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalInsertCitation')">Batal</button>
+        <button class="btn btn-cyan" onclick="executeInsertCitationToEditor()">Sisipkan ke Naskah</button>
+      </div>
+    </div>
+  </div>
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- ==========================================================================
@@ -1635,13 +1733,13 @@
 
     // Mesin Sitasi & Daftar Pustaka
     function renderBibliography() {
-      const style = userConfig.citationStyle || 'apa';
+      const style = userConfig.citationStyle || 'bodynote_apa';
       const refs = currentManuscript.references || [];
 
       document.getElementById('statRefLinked').textContent = `${refs.length} Jurnal Bereputasi`;
 
       const sorted = [...refs].sort((a,b) => (a.author || '').localeCompare(b.author || ''));
-      const textLines = sorted.map(ref => {
+      const textLines = sorted.map((ref, idx) => {
         const author = ref.author || 'Anonim';
         const year = ref.year || '2023';
         const title = ref.title || 'Judul Artikel';
@@ -1651,10 +1749,14 @@
         const pages = ref.pages ? `, ${ref.pages}` : '';
         const doi = ref.doi ? ` https://doi.org/${ref.doi}` : '';
 
-        if (style === 'ieee') {
-          return `${author}, "${title}," ${journal}, vol.${vol || '1'}, no.${issue || '1'}${pages}, ${year}.${doi}`;
+        if (style === 'footnote' || style === 'footnote_chicago') {
+          return `${idx + 1}. ${author}, "${title}," *${journal}* ${vol}${issue ? `, no. ${issue.replace(/[()]/g, '')}` : ''} (${year})${pages ? `: ${pages.replace(/^[,\s]+/, '')}` : ''}.${doi}`;
+        } else if (style === 'ieee') {
+          return `[${idx + 1}] ${author}, "${title}," *${journal}*, vol. ${vol || '1'}, no. ${issue.replace(/[()]/g, '') || '1'}${pages}, ${year}.${doi}`;
+        } else if (style === 'harvard') {
+          return `${author}, ${year}. ${title}. *${journal}*, ${vol}${issue}${pages}.${doi}`;
         }
-        return `${author}. (${year}). ${title}. ${journal},${vol}${issue}${pages}.${doi}`;
+        return `${author}. (${year}). ${title}. *${journal}*, *${vol}*${issue}${pages}.${doi}`;
       });
 
       document.getElementById('bibliographyOutputArea').value = textLines.join('\n\n');
@@ -1663,9 +1765,246 @@
 
     function updateCitationStyle() {
       userConfig.citationStyle = document.getElementById('selectCitationStyle').value;
-      document.getElementById('statCitationStyle').textContent = userConfig.citationStyle.toUpperCase();
+      document.getElementById('statCitationStyle').textContent = userConfig.citationStyle.toUpperCase().replace('_', ' ');
       renderBibliography();
       showToast(`Format sitasi diubah ke ${userConfig.citationStyle.toUpperCase()}.`);
+    }
+
+    function downloadRisFile() {
+      const refs = currentManuscript.references || [];
+      if (refs.length === 0) {
+        showToast('Belum ada referensi untuk diunduh.');
+        return;
+      }
+
+      const risLines = refs.map(ref => {
+        const authors = (ref.author || 'Unknown').split(/,|&| dan /).map(a => a.trim()).filter(Boolean);
+        const authorTags = authors.map(a => `AU  - ${a}`).join('\n');
+        const pages = (ref.pages || '').split('-');
+        const sp = pages[0] ? pages[0].trim() : '';
+        const ep = pages[1] ? pages[1].trim() : '';
+
+        return [
+          'TY  - JOUR',
+          `TI  - ${ref.title || 'Untitled'}`,
+          authorTags,
+          `PY  - ${ref.year || ''}`,
+          `JO  - ${ref.journal || 'Academic Journal'}`,
+          ref.volume ? `VL  - ${ref.volume}` : '',
+          ref.issue ? `IS  - ${ref.issue.replace(/[()]/g, '')}` : '',
+          sp ? `SP  - ${sp}` : '',
+          ep ? `EP  - ${ep}` : '',
+          ref.doi ? `DO  - ${ref.doi}` : '',
+          ref.url ? `UR  - ${ref.url}` : '',
+          'ER  - '
+        ].filter(Boolean).join('\n');
+      }).join('\n\n');
+
+      const blob = new Blob([risLines], { type: 'application/x-research-info-systems;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `docuresearch_references_${Date.now()}.ris`;
+      a.click();
+      showToast('File .RIS berhasil diunduh! Siap diimpor ke Mendeley, Zotero, atau EndNote.');
+    }
+
+    function openSearchModal() {
+      openModal('modalSearchArticles');
+      const container = document.getElementById('searchResultsContainer');
+      if (!container.innerHTML.trim()) {
+        executeArticleSearch();
+      }
+    }
+
+    function quickSearchTopic(topic) {
+      document.getElementById('searchArticleQuery').value = topic;
+      executeArticleSearch();
+    }
+
+    async function executeArticleSearch() {
+      const query = document.getElementById('searchArticleQuery').value.trim() || 'machine learning education';
+      const container = document.getElementById('searchResultsContainer');
+      const btn = document.getElementById('btnExecuteSearch');
+
+      btn.textContent = 'Mencari...';
+      btn.disabled = true;
+      container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Sedang mencari artikel open access di database ilmiah internasional...</div>';
+
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const json = await res.json();
+
+        if (json.ok && Array.isArray(json.articles) && json.articles.length > 0) {
+          container.innerHTML = '';
+          document.getElementById('searchStatusInfo').textContent = `Ditemukan ${json.articles.length} artikel ilmiah Open Access untuk "${query}":`;
+          document.getElementById('searchSourceBadge').textContent = json.source || 'OpenAlex Index';
+
+          json.articles.forEach(art => {
+            const card = document.createElement('div');
+            card.style = 'background:#ffffff; border:1px solid var(--border-subtle); border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:8px; box-shadow:0 2px 6px rgba(0,0,0,0.02);';
+
+            const downloadLink = art.pdfUrl || art.url;
+
+            card.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+                <h4 style="font-size:0.95rem; font-weight:800; color:#0f172a; line-height:1.4;">${art.title}</h4>
+                <span class="badge-pill" style="background:#dcfce7; color:#15803d; border-color:#bbf7d0; font-size:0.7rem; white-space:nowrap;">✓ Open Access</span>
+              </div>
+              <div style="font-size:0.78rem; color:#475569;">
+                <strong>${art.authors}</strong> &bull; (${art.year}) &bull; <em>${art.journal}</em>
+              </div>
+              <p style="font-size:0.75rem; color:#64748b; line-height:1.5;">${art.abstract}</p>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; flex-wrap:wrap; gap:8px;">
+                <span style="font-size:0.72rem; color:var(--text-muted);">Disitasi: ${art.citedBy || 0} kali &bull; DOI: ${art.doi || '-'}</span>
+                <div style="display:flex; gap:8px;">
+                  <a href="${downloadLink}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="text-decoration:none;">
+                    Buka / Download PDF ↗
+                  </a>
+                  <button class="btn btn-cyan btn-sm" onclick='addArticleToReferences(${JSON.stringify(art).replace(/'/g, "&#39;")})'>
+                    + Masukkan ke Naskah
+                  </button>
+                </div>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        } else {
+          container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Tidak ada artikel ditemukan. Coba gunakan kata kunci dalam bahasa Inggris atau topik yang lebih umum.</div>';
+        }
+      } catch (err) {
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Gagal menghubungi server pencarian. Periksa koneksi internet Anda.</div>';
+      } finally {
+        btn.textContent = '🔍 Cari Artikel';
+        btn.disabled = false;
+      }
+    }
+
+    function addArticleToReferences(art) {
+      const exists = currentManuscript.references.some(r => (r.doi && r.doi === art.doi) || r.title.toLowerCase() === art.title.toLowerCase());
+      if (exists) {
+        showToast('Artikel ini sudah ada dalam daftar referensi Anda.');
+        return;
+      }
+
+      currentManuscript.references.push({
+        id: `ref_${Date.now()}`,
+        author: art.authors,
+        year: String(art.year),
+        title: art.title,
+        journal: art.journal,
+        volume: art.volume || '',
+        issue: art.issue || '',
+        pages: art.pages || '',
+        doi: art.doi || '',
+        url: art.url || art.pdfUrl || ''
+      });
+
+      renderBibliography();
+      saveToLocalStore();
+      showToast(`"${art.title.slice(0, 40)}..." berhasil ditambahkan ke Daftar Pustaka!`);
+    }
+
+    let pendingCitationType = 'bodynote';
+
+    function openInsertCitationModal(type = 'bodynote') {
+      pendingCitationType = type;
+      const refs = currentManuscript.references || [];
+      if (refs.length === 0) {
+        showToast('Tambahkan referensi terlebih dahulu di menu Daftar Pustaka atau Cari Jurnal.');
+        return;
+      }
+
+      const select = document.getElementById('selectCitationReference');
+      select.innerHTML = '';
+      refs.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.id;
+        opt.textContent = `${r.author} (${r.year}) - ${r.title.slice(0, 50)}...`;
+        select.appendChild(opt);
+      });
+
+      document.getElementById('selectInsertCitationType').value = type;
+      document.getElementById('groupCitationPage').style.display = type === 'bodynote_page' ? 'block' : 'none';
+
+      document.getElementById('selectInsertCitationType').onchange = (e) => {
+        document.getElementById('groupCitationPage').style.display = e.target.value === 'bodynote_page' ? 'block' : 'none';
+      };
+
+      openModal('modalInsertCitation');
+    }
+
+    function executeInsertCitationToEditor() {
+      const refId = document.getElementById('selectCitationReference').value;
+      const type = document.getElementById('selectInsertCitationType').value;
+      const pageNum = document.getElementById('inputCitationPageNum').value.trim();
+      const ref = currentManuscript.references.find(r => r.id === refId);
+
+      if (!ref) return;
+
+      const firstAuthorLastName = (ref.author || 'Anonim').split(',')[0].trim().split(' ').pop();
+      const year = ref.year || '2023';
+
+      let citationText = '';
+      if (type === 'footnote') {
+        const num = currentManuscript.references.indexOf(ref) + 1;
+        const superscripts = ['⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'];
+        const sup = String(num).split('').map(d => superscripts[parseInt(d, 10)] || d).join('');
+        citationText = `${sup}`;
+
+        const textarea = document.getElementById('mainChapterEditor');
+        const footnoteNotice = `\n\n--------------------\n${sup} ${ref.author}, "${ref.title}," ${ref.journal} (${ref.year})${pageNum ? `, hlm. ${pageNum}` : ''}.`;
+        if (!textarea.value.includes(footnoteNotice.trim())) {
+          textarea.value += footnoteNotice;
+        }
+      } else if (type === 'bodynote_page') {
+        citationText = ` (${firstAuthorLastName}, ${year}: ${pageNum || '45'}) `;
+      } else if (type === 'ieee') {
+        const num = currentManuscript.references.indexOf(ref) + 1;
+        citationText = ` [${num}] `;
+      } else {
+        citationText = ` (${firstAuthorLastName}, ${year}) `;
+      }
+
+      insertTextAtCursor(citationText);
+      closeModal('modalInsertCitation');
+      saveCurrentChapter();
+      showToast('Sitasi berhasil disisipkan ke dalam naskah.');
+    }
+
+    function insertTextAtCursor(text) {
+      const textarea = document.getElementById('mainChapterEditor');
+      const start = textarea.selectionStart || textarea.value.length;
+      const end = textarea.selectionEnd || textarea.value.length;
+      textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + text.length;
+      textarea.focus();
+    }
+
+    function insertEditorHeading(level) {
+      const hashes = '#'.repeat(level) + ' ';
+      insertTextAtCursor('\n' + hashes);
+    }
+
+    function insertEditorFormat(startTag, endTag) {
+      const textarea = document.getElementById('mainChapterEditor');
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selected = textarea.value.substring(start, end) || 'Teks Tebal/Miring';
+      insertTextAtCursor(startTag + selected + endTag);
+    }
+
+    function insertAcademicTableTemplate() {
+      const t = `\n\nTabel 4.1 Perbandingan Metrik Evaluasi Model\n| Metode / Algoritma | Precision (%) | Recall (%) | F1-Score | Waktu Komputasi (detik) |\n| :--- | :--- | :--- | :--- | :--- |\n| Model Konvensional | 82.4 | 79.1 | 0.80 | 14.2 |\n| Model yang Diusulkan | 94.6 | 93.8 | 0.94 | 4.8 |\n\n`;
+      insertTextAtCursor(t);
+      saveCurrentChapter();
+      showToast('Template tabel ilmiah disisipkan.');
+    }
+
+    function insertConceptMapTemplate() {
+      const c = `\n\n[Diagram: Kerangka Konseptual Terlampir di Bagian Gambar 2.1 - Hubungan Variabel X terhadap Variabel Y]\n\n`;
+      insertTextAtCursor(c);
+      saveCurrentChapter();
+      showToast('Rujukan peta konsep disisipkan.');
     }
 
     function openAddReferenceModal() {
