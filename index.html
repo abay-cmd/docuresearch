@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DocuResearch — AI Academic Studio (Skripsi, Tesis, Disertasi, Jurnal, SLR)</title>
+  <meta name="description" content="Platform AI akademik cerdas untuk menyusun skripsi, tesis, disertasi, artikel ilmiah, dan SLR berbasis Gemini Pro, anti AI-slop, cover otomatis, dan sitasi lengkap.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       GENEX-INSPIRED PALETTE: DEEP MIDNIGHT NAVY, CYAN GLOW, REFINED WHITE CARDS
+       ========================================================================== */
+    :root {
+      --bg-midnight: #080d1a;
+      --bg-navy-dark: #0f172a;
+      --bg-navy-card: #141f36;
+      --bg-navy-surface: #1e293b;
+      --bg-page: #f4f6fa;
+      --bg-surface: #ffffff;
+      --border-subtle: #e2e8f0;
+      --border-navy: #1e2e4f;
+      --border-glow: #38bdf8;
+
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --text-inverse: #f8fafc;
+
+      --accent-cyan: #00f0ff;
+      --accent-blue: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-success: #10b981;
+      --accent-gold: #f59e0b;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-pill: 9999px;
+
+      --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+      --shadow-navy: 0 16px 40px -10px rgba(8, 13, 26, 0.4);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.25);
+
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Merriweather', Georgia, serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --motion-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      --motion-smooth: 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================================================
+       TOP FLOATING NAV (GeneX Style Navbar)
+       ========================================================================== */
+    .top-navbar {
+      background: var(--bg-navy-dark);
+      color: var(--text-inverse);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      border-bottom: 1px solid var(--border-navy);
+      box-shadow: var(--shadow-navy);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Continuous One-line Pen Stroke Logo (No background shapes) */
+    .oneline-pen-sketch {
+      width: 36px;
+      height: 36px;
+      stroke: var(--accent-cyan);
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.4));
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .brand-title span {
+      color: var(--accent-cyan);
+    }
+
+    .brand-sub {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-light);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+    }
+
+    .nav-link-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color var(--motion-fast);
+      text-decoration: none;
+    }
+
+    .nav-link-btn:hover {
+      color: var(--accent-cyan);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tier-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tier-badge.pro {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-gold);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--motion-smooth);
+      text-decoration: none;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-cyan {
+      background: var(--accent-cyan);
+      color: #080d1a;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    }
+
+    .btn-cyan:hover {
+      background: #38bdf8;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+    }
+
+    .btn-outline-white {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .btn-outline-white:hover {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      border-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.78rem;
+    }
+
+    /* ==========================================================================
+       MAIN APP WORKSPACE (GeneX 2-Column Split: Navy Left / White Right)
+       ========================================================================== */
+    .app-workspace {
+      max-width: 1560px;
+      margin: 24px auto;
+      padding: 0 24px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    @media (max-width: 1100px) {
+      .app-workspace {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+      }
+    }
+
+    /* ==========================================================================
+       SIDEBAR: FLOATING DEEP NAVY CONTROL PANEL (GeneX Style)
+       ========================================================================== */
+    .navy-sidebar-panel {
+      background: var(--bg-navy-dark);
+      color: var(--text-inverse);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      border: 1px solid var(--border-navy);
+      box-shadow: var(--shadow-navy);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+
+    .manuscript-meta-card {
+      background: var(--bg-navy-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      border: 1px solid var(--border-navy);
+    }
+
+    .meta-type-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-cyan);
+    }
+
+    .meta-title-text {
+      font-size: 0.95rem;
+      font-weight: 800;
+      line-height: 1.35;
+      margin: 6px 0 10px;
+      color: #ffffff;
+    }
+
+    .meta-author-sub {
+      font-size: 0.78rem;
+      color: var(--text-light);
+    }
+
+    /* Chapter Tree Navigation */
+    .chapter-tree-header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chapter-tree {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .tree-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all var(--motion-fast);
+    }
+
+    .tree-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .tree-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+
+    .tree-btn.active {
+      background: var(--bg-navy-surface);
+      color: var(--accent-cyan);
+      border-color: rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+    }
+
+    .tree-btn.front-matter {
+      font-size: 0.78rem;
+    }
+
+    .sidebar-actions-card {
+      border-top: 1px solid var(--border-navy);
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ==========================================================================
+       MAIN DASHBOARD & ACADEMIC LIVE EDITOR (White Clean Canvas with Hero Stats)
+       ========================================================================== */
+    .main-workspace-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .main-workspace-card { padding: 20px; }
+    }
+
+    /* GeneX Hero Banner: Greeting & Particle Graphic */
+    .hero-stat-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .hero-stat-banner::after {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(0,240,255,0.2) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+    }
+
+    .hero-title-wrap h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-title-wrap p {
+      font-size: 0.82rem;
+      color: var(--accent-blue);
+      margin-top: 4px;
+    }
+
+    .hero-badges-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat-box {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 8px 14px;
+      font-size: 0.78rem;
+    }
+
+    .hero-stat-box strong {
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      display: block;
+    }
+
+    /* AI Anti-Slop Generation Toolbar */
+    .ai-generator-panel {
+      background: #f8fafc;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .panel-header-row h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .anti-slop-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* Live Academic Editor */
+    .editor-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: white;
+    }
+
+    .editor-toolbar {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .editor-tool-btn {
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-main);
+      transition: all var(--motion-fast);
+    }
+
+    .editor-tool-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .editor-textarea {
+      width: 100%;
+      min-height: 480px;
+      padding: 24px 28px;
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #1e293b;
+      border: none;
+      outline: none;
+      resize: vertical;
+    }
+
+    /* ==========================================================================
+       OFFICIAL COVER PREVIEW & FRONT MATTER GENERATOR
+       ========================================================================== */
+    .official-cover-sheet {
+      background: white;
+      border: 2px solid #0f172a;
+      border-radius: var(--radius-md);
+      padding: 48px;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      font-family: 'Times New Roman', Times, serif;
+      line-height: 1.4;
+    }
+
+    .cover-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 24px;
+    }
+
+    .cover-type-notice {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+    }
+
+    .cover-logo-img {
+      max-width: 140px;
+      max-height: 140px;
+      object-fit: contain;
+      margin: 20px auto 36px;
+      display: block;
+    }
+
+    .cover-author-block {
+      margin: 28px 0;
+      font-size: 1rem;
+    }
+
+    .cover-author-name {
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .cover-inst-block {
+      margin-top: 40px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    /* Diagram Canvas Card (Concept Map & PRISMA) */
+    .diagram-card {
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      overflow-x: auto;
+    }
+
+    /* Modal Framework */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(8, 13, 26, 0.7);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-navy);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-box.wide {
+      max-width: 960px;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; transform: scale(0.96) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-navy-dark);
+      color: white;
+    }
+
+    .modal-header h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .modal-body {
+      padding: 28px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .modal-footer {
+      padding: 20px 28px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background: #f8fafc;
+    }
+
+    /* Form Controls */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .form-control {
+      width: 100%;
+      font-family: inherit;
+      font-size: 0.88rem;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      outline: none;
+      transition: border-color var(--motion-fast);
+    }
+
+    .form-control:focus {
+      border-color: #0f172a;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* Pricing Plans Cards */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .plans-grid { grid-template-columns: 1fr; }
+    }
+
+    .plan-card {
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      position: relative;
+    }
+
+    .plan-card.featured {
+      border-color: var(--accent-cyan);
+      background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+
+    .plan-tag {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--accent-cyan);
+      color: #080d1a;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    .plan-price {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .plan-price span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #334155;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Footer (GeneX Dark Solid Footer) */
+    .footer-dark {
+      background: var(--bg-navy-dark);
+      color: var(--text-light);
+      padding: 40px;
+      margin-top: 48px;
+      border-top: 1px solid var(--border-navy);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--bg-navy-dark);
+      color: white;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-navy);
+      border: 1px solid var(--border-navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Print styling */
+    @media print {
+      body { background: white !important; padding: 0 !important; }
+      .top-navbar, .navy-sidebar-panel, .hero-stat-banner, .ai-generator-panel, .editor-toolbar, .footer-dark, .toast-container, .no-print {
+        display: none !important;
+      }
+      .app-workspace { display: block !important; padding: 0 !important; margin: 0 !important; }
+      .main-workspace-card { border: none !important; box-shadow: none !important; padding: 0 !important; }
+      .official-cover-sheet { border: none !important; box-shadow: none !important; page-break-after: always; }
+      .editor-textarea { border: none !important; min-height: auto !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP FLOATING NAV (GeneX Style Navbar with Brand & Status)
+       ========================================================================== -->
+  <header class="top-navbar">
+    <div class="brand-group">
+      <!-- One-line Pen Sketch Logo (Pure stroke SVG) -->
+      <svg class="oneline-pen-sketch" viewBox="0 0 100 100" aria-label="DocuResearch One-Line Pen Logo" role="img">
+        <path d="M14 84 C30 84, 36 70, 40 58 C43 46, 45 28, 48 14 C49 10, 51 10, 52 14 C55 28, 57 46, 60 58 C64 70, 70 84, 86 84 M48 14 L52 14 M50 14 L50 42 C47 42, 47 48, 50 48 C53 48, 53 42, 50 42 M39 58 C45 61, 55 61, 61 58 M26 84 C34 78, 66 78, 74 84 M10 88 C35 94, 65 76, 92 84" />
+      </svg>
+      <div>
+        <div class="brand-title">Docu<span>Research</span></div>
+        <div class="brand-sub">Academic AI Studio & Synthesis</div>
+      </div>
+    </div>
+
+    <!-- Center Navigation Links -->
+    <ul class="nav-links">
+      <li><a class="nav-link-btn" href="#editor" onclick="switchView('editor')">Naskah & Editor</a></li>
+      <li><a class="nav-link-btn" href="#cover" onclick="switchView('cover')">Halaman Sampul (Cover)</a></li>
+      <li><a class="nav-link-btn" href="#diagram" onclick="switchView('diagram')">Peta Konsep & PRISMA</a></li>
+      <li><a class="nav-link-btn" href="#references" onclick="switchView('references')">Daftar Pustaka</a></li>
+      <li><a class="nav-link-btn" href="#settings" onclick="openSettingsModal()">Pengaturan API</a></li>
+    </ul>
+
+    <!-- Right Controls -->
+    <div class="nav-controls">
+      <div class="tier-badge" id="displayActiveTier">
+        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
+        Gratis (Gemini Anda)
+      </div>
+      <button class="btn btn-outline-white btn-sm" onclick="openPricingModal()">Upgrade Pro</button>
+      <button class="btn btn-cyan btn-sm" onclick="exportFullDocumentWord()">
+        <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Unduh Dokumen
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN APP WORKSPACE (Split: Deep Navy Left / High-Res Academic Canvas Right)
+       ========================================================================== -->
+  <main class="app-workspace">
+
+    <!-- SIDEBAR PANEL (Floating Deep Navy Card) -->
+    <aside class="navy-sidebar-panel">
+      <!-- Manuscript Header Card -->
+      <div class="manuscript-meta-card">
+        <span class="meta-type-badge" id="sidebarDocType">TESIS (MAGISTER S2)</span>
+        <h4 class="meta-title-text" id="sidebarDocTitle">Pengembangan Model Prediksi Risiko Akademik Menggunakan Machine Learning</h4>
+        <div class="meta-author-sub" id="sidebarDocAuthor">Ahmad Fauzan • Universitas Indonesia</div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-outline-white btn-sm" style="flex:1;" onclick="openNewProjectModal()">
+          <svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Proyek Baru
+        </button>
+        <button class="btn btn-outline-white btn-sm" style="flex:1;" onclick="openSaveCloudModal()">
+          <svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
+          Simpan Cloud
+        </button>
+      </div>
+
+      <!-- Chapter Tree Navigation -->
+      <div>
+        <div class="chapter-tree-header">
+          <span>Struktur Naskah</span>
+          <span style="font-size:0.7rem; color:var(--accent-cyan);" id="treeTotalCount">17 Bagian</span>
+        </div>
+        <div class="chapter-tree" id="chapterNavTree">
+          <!-- Rendered dynamically by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Bottom Settings & Cloud Info -->
+      <div class="sidebar-actions-card">
+        <button class="tree-btn" onclick="openSettingsModal()">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Kunci API Gemini & Template Kampus
+        </button>
+        <button class="tree-btn" onclick="openDatabaseInfoModal()">
+          <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          Status Database & Google Sheets
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN RIGHT CONTENT VIEWPORT -->
+    <div class="main-workspace-card">
+
+      <!-- GENEX HERO BANNER: Progress & Anti AI-Slop Index -->
+      <section class="hero-stat-banner">
+        <div class="hero-title-wrap">
+          <h2>Ruang Kerja Penulisan Ilmiah</h2>
+          <p id="heroActiveSectionLabel">Menampilkan: BAB I PENDAHULUAN</p>
+          <div class="hero-badges-row">
+            <div class="hero-stat-box">
+              <span>Anti AI-Slop Index</span>
+              <strong>100% Akademik Baku</strong>
+            </div>
+            <div class="hero-stat-box">
+              <span>Total Kata</span>
+              <strong id="statWordCount">1.480 Kata</strong>
+            </div>
+            <div class="hero-stat-box">
+              <span>Sumber Terhubung</span>
+              <strong id="statRefLinked">4 Jurnal Bereputasi</strong>
+            </div>
+            <div class="hero-stat-box">
+              <span>Format Sitasi</span>
+              <strong id="statCitationStyle">APA 7th Edition</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 1: ACADEMIC CHAPTER EDITOR & AI GENERATOR -->
+      <div id="viewEditorSection">
+
+        <!-- AI Generator Assistant Bar -->
+        <section class="ai-generator-panel">
+          <div class="panel-header-row">
+            <h3>
+              <svg style="width:20px;height:20px;stroke:var(--accent-blue);fill:none;stroke-width:2;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              Asisten Perumusan Draf (Google Gemini Pro)
+            </h3>
+            <span class="anti-slop-badge">✓ Tanpa Simbol &amp; Bahasa Klise AI</span>
+          </div>
+
+          <p style="font-size:0.8rem; color:var(--text-muted);">
+            Sistem secara otomatis menyusun argumen ilmiah, sintesis temuan, dan kerangka subbab berdasarkan judul, data referensi yang Anda unggah, dan pedoman kampus:
+          </p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Rumusan Masalah / Research Gap Spesifik:</label>
+              <input type="text" class="form-control" id="aiInputGap" placeholder="Misal: Kurangnya model prediktif adaptif pada dataset lokal...">
+            </div>
+            <div class="form-group">
+              <label>Dokumen Referensi / Catatan Teori Anda (PDF/Teks):</label>
+              <input type="text" class="form-control" id="aiInputUserRef" placeholder="Tempel rujukan: Rahman (2023), Kusuma et al. (2022)...">
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div style="font-size:0.75rem; color:var(--text-muted);">
+              Mode AI: <span style="font-weight:700; color:var(--text-main);" id="aiCurrentModeText">Gemini Pro API (BYOK / Managed)</span>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-secondary btn-sm" onclick="openUploadRefModal()">
+                <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                Unggah Berkas Referensi
+              </button>
+              <button class="btn btn-cyan btn-sm" id="btnRunAiGenerate" onclick="executeAiChapterGeneration()">
+                <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Susun Draf Bab Ini dengan AI
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Live Academic Editor Canvas -->
+        <section class="editor-container" style="margin-top:20px;">
+          <div class="editor-toolbar">
+            <button class="editor-tool-btn" onclick="insertEditorHeading(1)">H1</button>
+            <button class="editor-tool-btn" onclick="insertEditorHeading(2)">H2</button>
+            <button class="editor-tool-btn" onclick="insertEditorHeading(3)">H3</button>
+            <button class="editor-tool-btn" onclick="insertEditorFormat('**', '**')"><strong>B</strong></button>
+            <button class="editor-tool-btn" onclick="insertEditorFormat('*', '*')"><em>I</em></button>
+            <button class="editor-tool-btn" onclick="openInsertCitationModal()">+ Sitasi</button>
+            <button class="editor-tool-btn" onclick="insertAcademicTableTemplate()">+ Tabel Ilmiah</button>
+            <button class="editor-tool-btn" onclick="insertConceptMapTemplate()">+ Peta Konsep</button>
+            <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.75rem; color:var(--text-muted);" id="editorSaveStatus">Tersimpan otomatis</span>
+              <button class="btn btn-secondary btn-sm" onclick="saveCurrentChapter()">Simpan</button>
+            </div>
+          </div>
+
+          <textarea class="editor-textarea" id="mainChapterEditor" placeholder="Tuliskan naskah akademik Anda di sini..."></textarea>
+        </section>
+      </div>
+
+      <!-- VIEW 2: OFFICIAL COVER PAGE PREVIEW (Standar Perguruan Tinggi) -->
+      <div id="viewCoverSection" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <div>
+            <h3>Generator Halaman Sampul (Cover Resmi)</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Diformat sesuai pedoman resmi skripsi, tesis, dan disertasi perguruan tinggi</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-secondary btn-sm" onclick="openEditCoverMetaModal()">Ubah Data Cover &amp; Logo</button>
+            <button class="btn btn-cyan btn-sm" onclick="window.print()">Cetak Halaman Sampul (PDF)</button>
+          </div>
+        </div>
+
+        <!-- Rendered Official Cover Sheet -->
+        <div class="official-cover-sheet" id="renderedCoverSheet">
+          <div class="cover-title" id="coverDisplayTitle">
+            PENGEMBANGAN MODEL PREDIKSI RISIKO AKADEMIK MENGGUNAKAN ALGORITMA MACHINE LEARNING TEROPTIMASI
+          </div>
+
+          <div class="cover-type-notice" id="coverDisplayNotice">
+            TESIS<br>
+            <span style="font-size:0.85rem; font-weight:400; text-transform:none;">
+              Diajukan sebagai salah satu syarat untuk memperoleh gelar Magister Ilmu Komputer (M.Kom)
+            </span>
+          </div>
+
+          <!-- University Logo -->
+          <img id="coverDisplayLogo" class="cover-logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%230f172a' stroke-width='3'><circle cx='50' cy='50' r='42'/><polygon points='50,18 78,74 22,74'/><circle cx='50' cy='50' r='12'/></svg>" alt="Logo Universitas">
+
+          <div class="cover-author-block">
+            Oleh:<br>
+            <div class="cover-author-name" id="coverDisplayAuthor">AHMAD FAUZAN</div>
+            NPM / NIM: <span id="coverDisplayNIM">2208107010045</span>
+          </div>
+
+          <div class="cover-inst-block">
+            <span id="coverDisplayStudy">PROGRAM STUDI MAGISTER ILMU KOMPUTER</span><br>
+            <span id="coverDisplayFaculty">FAKULTAS MATEMATIKA DAN ILMU PENGETAHUAN ALAM</span><br>
+            <span id="coverDisplayUniv">UNIVERSITAS INDONESIA</span><br>
+            <span id="coverDisplayCity">DEPOK</span><br>
+            <span id="coverDisplayYear">2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 3: CONCEPT MAP & PRISMA DIAGRAM GENERATOR -->
+      <div id="viewDiagramSection" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div>
+            <h3>Generator Diagram Ilmiah &amp; Peta Konsep</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Buat kerangka pemikiran, alur penelitian, atau diagram PRISMA 2020 untuk SLR</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-secondary btn-sm" onclick="renderDiagramType('framework')">Kerangka Konseptual</button>
+            <button class="btn btn-secondary btn-sm" onclick="renderDiagramType('flowchart')">Alur Penelitian</button>
+            <button class="btn btn-cyan btn-sm" onclick="renderDiagramType('prisma')">Protokol PRISMA 2020 (SLR)</button>
+          </div>
+        </div>
+
+        <div class="diagram-card" id="diagramDisplayCanvas">
+          <!-- Rendered SVG Diagram -->
+        </div>
+      </div>
+
+      <!-- VIEW 4: AUTO CITATION & BIBLIOGRAPHY GENERATOR -->
+      <div id="viewReferencesSection" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div>
+            <h3>Daftar Pustaka &amp; Mesin Sitasi Otomatis</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Terurut abjad A-Z sesuai kaidah penulisan APA 7th, IEEE, atau Harvard</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <select class="form-control" id="selectCitationStyle" style="width:160px;" onchange="updateCitationStyle()">
+              <option value="apa">APA 7th Edition</option>
+              <option value="ieee">IEEE Standard</option>
+              <option value="harvard">Harvard Style</option>
+            </select>
+            <button class="btn btn-cyan btn-sm" onclick="openAddReferenceModal()">+ Tambah Referensi</button>
+          </div>
+        </div>
+
+        <div class="editor-container">
+          <div style="padding:16px; border-bottom:1px solid var(--border-subtle); display:flex; justify-content:space-between;">
+            <span style="font-weight:700; font-size:0.88rem;">Teks Daftar Pustaka Lengkap:</span>
+            <button class="btn btn-secondary btn-sm" onclick="copyBibliographyText()">Salin Daftar Pustaka</button>
+          </div>
+          <textarea class="editor-textarea" id="bibliographyOutputArea" style="min-height:360px;" readonly></textarea>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       MODAL: PENGATURAN API KEY GEMINI & TEMPLATE KAMPUS
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalSettings">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Pengaturan AI Gemini &amp; Panduan Kampus</h3>
+        <button class="btn-icon" style="color:white; background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal('modalSettings')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Google Gemini API Key Anda (Tier Gratis):</label>
+          <input type="password" class="form-control" id="inputUserGeminiKey" placeholder="AIzaSy...">
+          <small style="color:var(--text-muted); font-size:0.75rem;">
+            Dapatkan kunci gratis di <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#0284c7;">Google AI Studio</a>. Kunci disimpan aman hanya di browser komputer Anda.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Panduan Khusus / Format Template Kampus Anda:</label>
+          <textarea class="form-control" id="inputCampusTemplate" style="height:120px;" placeholder="Contoh: Menggunakan margin kiri 4cm, font Times New Roman, subbab maksimal 3 level, bab 3 wajib kuantitatif regresi berganda..."></textarea>
+          <small style="color:var(--text-muted); font-size:0.75rem;">
+            AI akan mematuhi instruksi khusus ini pada setiap pembuatan draf bab.
+          </small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalSettings')">Batal</button>
+        <button class="btn btn-cyan" onclick="saveSettings()">Simpan Pengaturan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: EDIT COVER METADATA & UPLOAD LOGO KAMPUS
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalEditCover">
+    <div class="modal-box wide">
+      <div class="modal-header">
+        <h3>Kelola Halaman Sampul &amp; Logo Institusi</h3>
+        <button class="btn-icon" style="color:white; background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal('modalEditCover')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Judul Karya Tulis Ilmiah:</label>
+          <input type="text" class="form-control" id="inputCoverTitle">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jenis Karya Tulis:</label>
+            <select class="form-control" id="inputCoverType" onchange="handleManuscriptTypeChange()">
+              <option value="skripsi">Skripsi (Sarjana S1)</option>
+              <option value="tesis">Tesis (Magister S2)</option>
+              <option value="disertasi">Disertasi (Doktoral S3)</option>
+              <option value="artikel_ilmiah">Artikel Jurnal Ilmiah (IMRAD)</option>
+              <option value="slr">Systematic Literature Review (SLR)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Unggah File Logo Kampus (PNG/JPG/SVG):</label>
+            <input type="file" class="form-control" id="inputCoverLogoFile" accept="image/*" onchange="handleLogoUpload(event)">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nama Lengkap Penulis:</label>
+            <input type="text" class="form-control" id="inputCoverAuthor">
+          </div>
+          <div class="form-group">
+            <label>NIM / NPM:</label>
+            <input type="text" class="form-control" id="inputCoverNIM">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Program Studi:</label>
+            <input type="text" class="form-control" id="inputCoverStudy">
+          </div>
+          <div class="form-group">
+            <label>Fakultas:</label>
+            <input type="text" class="form-control" id="inputCoverFaculty">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nama Universitas / Perguruan Tinggi:</label>
+            <input type="text" class="form-control" id="inputCoverUniv">
+          </div>
+          <div class="form-group">
+            <label>Kota &amp; Tahun:</label>
+            <input type="text" class="form-control" id="inputCoverYear">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalEditCover')">Batal</button>
+        <button class="btn btn-cyan" onclick="saveCoverMetadata()">Terapkan ke Cover</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: PRICING & TIER BERBAYAR (GeneX Style Premium)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalPricing">
+    <div class="modal-box wide">
+      <div class="modal-header">
+        <h3>Paket Layanan DocuResearch</h3>
+        <button class="btn-icon" style="color:white; background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal('modalPricing')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">
+          Pilih paket yang sesuai dengan kebutuhan akademik dan riset skripsi/tesis Anda:
+        </p>
+
+        <div class="plans-grid">
+          <!-- Free Plan -->
+          <div class="plan-card">
+            <div>
+              <h4 style="font-size:1.15rem; font-weight:800;">Student Free (BYOK)</h4>
+              <p style="font-size:0.75rem; color:var(--text-muted);">Gunakan API Key Gemini pribadi Anda</p>
+              <div class="plan-price" style="margin:16px 0;">Rp 0 <span>/ selamanya</span></div>
+              <ul class="plan-features">
+                <li>✓ Menggunakan kuota Gemini AI Anda sendiri</li>
+                <li>✓ Editor naskah &amp; auto-save lokal</li>
+                <li>✓ Generator cover resmi kampus</li>
+                <li>✓ Format sitasi APA, IEEE, Harvard</li>
+                <li>✓ Ekspor dokumen standar</li>
+              </ul>
+            </div>
+            <button class="btn btn-secondary" style="width:100%;" onclick="activateTier('free')">Gunakan Paket Gratis</button>
+          </div>
+
+          <!-- Academic Pro Plan -->
+          <div class="plan-card featured">
+            <div class="plan-tag">REKOMENDASI AKADEMISI</div>
+            <div>
+              <h4 style="font-size:1.15rem; font-weight:800; color:#0f172a;">Academic Pro Server</h4>
+              <p style="font-size:0.75rem; color:var(--text-muted);">Akses AI Gemini Pro langsung tanpa perlu API key</p>
+              <div class="plan-price" style="margin:16px 0;">Rp 49.000 <span>/ bulan</span></div>
+              <ul class="plan-features">
+                <li>✓ <strong>Gemini Pro Server Tanpa Batas</strong> (Tanpa repot setup API)</li>
+                <li>✓ Asistensi Sintesis SLR &amp; PRISMA 2020 Lanjutan</li>
+                <li>✓ Pembuatan Peta Konsep &amp; Diagram Interaktif</li>
+                <li>✓ Parafrase Anti-Plagiasi &amp; Anti AI-Slop Tingkat Tinggi</li>
+                <li>✓ Cloud Database Sync ke Google Sheets</li>
+                <li>✓ Ekspor Naskah Lengkap Word (.docx) Otomatis</li>
+              </ul>
+            </div>
+            <button class="btn btn-cyan" style="width:100%;" onclick="activateTier('pro')">Aktifkan Academic Pro</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalPricing')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: TAMBAH SUMBER REFERENSI JURNAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalAddReference">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Tambah Referensi Jurnal / Buku</h3>
+        <button class="btn-icon" style="color:white; background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal('modalAddReference')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nama Penulis (contoh: Rahman, A., &amp; Setiawan, B.):</label>
+          <input type="text" class="form-control" id="inputRefAuthor" placeholder="Nama Penulis">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tahun Publikasi:</label>
+            <input type="text" class="form-control" id="inputRefYear" placeholder="2023">
+          </div>
+          <div class="form-group">
+            <label>Volume / Issue:</label>
+            <input type="text" class="form-control" id="inputRefVol" placeholder="15(2)">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Judul Artikel / Buku:</label>
+          <input type="text" class="form-control" id="inputRefTitle" placeholder="Judul Karya Ilmiah">
+        </div>
+        <div class="form-group">
+          <label>Nama Jurnal / Penerbit:</label>
+          <input type="text" class="form-control" id="inputRefJournal" placeholder="IEEE Transactions on Software Engineering">
+        </div>
+        <div class="form-group">
+          <label>DOI / URL:</label>
+          <input type="text" class="form-control" id="inputRefDoi" placeholder="10.1109/TSE.2023.12345">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalAddReference')">Batal</button>
+        <button class="btn btn-cyan" onclick="saveNewReference()">Simpan Referensi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ==========================================================================
+       FOOTER (GeneX Dark Solid Footer)
+       ========================================================================== -->
+  <footer class="footer-dark no-print">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <svg class="oneline-pen-sketch" style="width:28px;height:28px;" viewBox="0 0 100 100">
+        <path d="M14 84 C30 84, 36 70, 40 58 C43 46, 45 28, 48 14 C49 10, 51 10, 52 14 C55 28, 57 46, 60 58 C64 70, 70 84, 86 84 M48 14 L52 14 M50 14 L50 42 C47 42, 47 48, 50 48 C53 48, 53 42, 50 42 M39 58 C45 61, 55 61, 61 58 M26 84 C34 78, 66 78, 74 84 M10 88 C35 94, 65 76, 92 84" />
+      </svg>
+      <div>
+        <strong style="color:white; font-size:0.95rem;">DocuResearch</strong>
+        <p style="font-size:0.72rem; color:var(--text-light);">AI Academic Synthesis &amp; Research Platform</p>
+      </div>
+    </div>
+    <div style="font-size:0.75rem; color:var(--text-light);">
+      Mematuhi Standar Penulisan Ilmiah &bull; Bebas AI-Slop &bull; Terhubung ke Google Sheets
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       CLIENT APPLICATION LOGIC (State, AI Generator, Tree, Cover, Citations)
+       ========================================================================== -->
+  <script>
+    // State Proyek Akademik
+    let currentManuscript = {
+      id: 'doc_proj_01',
+      title: 'Pengembangan Model Prediksi Risiko Akademik Menggunakan Algoritma Machine Learning Teroptimasi',
+      manuscriptType: 'tesis',
+      authorName: 'Ahmad Fauzan, S.Kom',
+      authorIdNumber: '2208107010045',
+      programStudy: 'Magister Ilmu Komputer',
+      faculty: 'Fakultas Matematika dan Ilmu Pengetahuan Alam',
+      university: 'Universitas Indonesia',
+      city: 'Depok',
+      year: '2026',
+      logoDataUrl: '',
+      pin: '1234',
+      activeChapterId: 'bab1',
+      chapters: {
+        cover: '',
+        approval: 'HALAMAN PENGESAHAN\n\nNaskah Tesis ini telah diuji dan disetujui oleh Komisi Penguji Program Pascasarjana...',
+        declaration: 'SURAT PERNYATAAN BEBAS PLAGIASI\n\nSaya menyatakan dengan sesungguhnya bahwa naskah ini merupakan hasil karya asli saya sendiri...',
+        motto: 'Motto:\n"Menuntut ilmu adalah perjalanan tanpa henti menuju kebijaksanaan dan kemanfaatan bagi sesama."\n\nKupersembahkan untuk kedua orang tua tercinta dan almamater.',
+        preface: 'KATA PENGANTAR\n\nPuji dan syukur penulis panjatkan ke hadirat Tuhan Yang Maha Esa atas rahmat dan karunia-Nya sehingga tesis ini dapat diselesaikan dengan baik...',
+        abstract_id: 'ABSTRAK\n\nPenelitian ini bertujuan untuk mengembangkan model prediksi risiko akademik mahasiswa dengan memanfaatkan integrasi algoritma pembelajaran mesin teroptimasi...',
+        abstract_en: 'ABSTRACT\n\nThis study aims to develop a predictive model for academic risk among university students using optimized machine learning algorithms...',
+        toc: 'DAFTAR ISI\n\nHalaman Sampul\nHalaman Pengesahan\nAbstrak\nBAB I PENDAHULUAN\nBAB II TINJAUAN PUSTAKA\nBAB III METODOLOGI\nBAB IV HASIL DAN PEMBAHASAN\nBAB V KESIMPULAN\nDAFTAR PUSTAKA',
+        tot: 'DAFTAR TABEL\n\nTabel 3.1 Karakteristik Sampel Penelitian\nTabel 4.1 Hasil Evaluasi Akurasi Model Komparatif',
+        tof: 'DAFTAR GAMBAR\n\nGambar 2.1 Kerangka Konseptual Penelitian\nGambar 3.1 Alur Metodologi Eksperimental',
+        bab1: '1.1 Latar Belakang Masalah\nIntegrasi teknologi kecerdasan buatan dalam sektor pendidikan tinggi telah membuka peluang besar dalam peningkatan retensi dan kesuksesan studi mahasiswa. Berbagai penelitian empiris terdahulu (Rahman & Setiawan, 2023; Kusuma et al., 2022) menggarisbawahi bahwa deteksi dini terhadap potensi kegagalan akademik mampu mengurangi angka putus studi secara signifikan.\n\n1.2 Rumusan Masalah\n1. Bagaimana merancang arsitektur model klasifikasi yang mampu meminimalkan false positive dalam deteksi risiko akademik?\n2. Bagaimana performa model yang dirancang dibandingkan dengan model konvensional?\n\n1.3 Tujuan Penelitian\n1. Mengembangkan algoritma prediksi performa akademik berbasis optimasi hiperparameter.\n2. Menguji signifikansi peningkatan akurasi model secara statistik.',
+        bab2: '2.1 Kajian Pustaka Terkait\nKajian literatur menunjukkan bahwa model prediksi akademik telah mengalami evolusi dari pendekatan statistik regresi logistik konvensional menuju algoritma ensemble learning...',
+        bab3: '3.1 Desain Penelitian\nPenelitian ini menggunakan pendekatan eksperimental kuantitatif dengan protokol validasi silang (k-fold cross validation)...',
+        bab4: '4.1 Hasil Pengujian Model\nBerdasarkan pengujian terhadap dataset uji, model yang diusulkan mencapai tingkat akurasi 94.2% dengan F1-score sebesar 0.92...',
+        bab5: '5.1 Kesimpulan\nPenelitian ini membuktikan bahwa optimasi hiperparameter mampu meningkatkan stabilitas prediksi secara konsisten...',
+        references: '',
+        appendix: 'LAMPIRAN 1: Tabel Matriks Data Eksperimen'
+      },
+      references: [
+        {
+          id: 'ref1',
+          author: 'Rahman, A., & Setiawan, B.',
+          year: '2023',
+          title: 'Optimasi Model Pembelajaran Mesin untuk Prediksi Retensi Mahasiswa',
+          journal: 'Jurnal Sistem Informasi dan Informatika',
+          volume: '15',
+          issue: '2',
+          pages: '112-125',
+          doi: '10.1234/jsii.v15i2.5678'
+        },
+        {
+          id: 'ref2',
+          author: 'Kusuma, H., Pratama, D., & Chen, M.',
+          year: '2022',
+          title: 'Adaptive Early Warning Systems in Higher Education: An Empirical Study',
+          journal: 'IEEE Transactions on Learning Technologies',
+          volume: '8',
+          issue: '4',
+          pages: '340-352',
+          doi: '10.1109/TLT.2022.314159'
+        }
+      ]
+    };
+
+    // Konfigurasi Pengguna
+    let userConfig = {
+      apiKey: '',
+      tier: 'free', // 'free' | 'pro'
+      campusTemplate: '',
+      citationStyle: 'apa'
+    };
+
+    // Inisialisasi Aplikasi
+    document.addEventListener('DOMContentLoaded', () => {
+      loadConfig();
+      renderChapterNavTree();
+      loadCurrentChapter();
+      updateCoverDisplay();
+      renderBibliography();
+      renderDiagramType('framework');
+      checkApiHealth();
+    });
+
+    // Render Struktur Bab di Sidebar
+    function renderChapterNavTree() {
+      const container = document.getElementById('chapterNavTree');
+      container.innerHTML = '';
+
+      const items = [
+        { id: 'cover', title: 'Halaman Sampul (Cover)', isFront: true },
+        { id: 'approval', title: 'Halaman Pengesahan', isFront: true },
+        { id: 'declaration', title: 'Pernyataan Keaslian', isFront: true },
+        { id: 'motto', title: 'Motto & Persembahan', isFront: true },
+        { id: 'preface', title: 'Kata Pengantar & Terima Kasih', isFront: true },
+        { id: 'abstract_id', title: 'Abstrak (Bahasa Indonesia)', isFront: true },
+        { id: 'abstract_en', title: 'Abstract (English)', isFront: true },
+        { id: 'toc', title: 'Daftar Isi', isFront: true },
+        { id: 'tot', title: 'Daftar Tabel', isFront: true },
+        { id: 'tof', title: 'Daftar Gambar', isFront: true },
+        { id: 'bab1', title: 'BAB I PENDAHULUAN' },
+        { id: 'bab2', title: 'BAB II TINJAUAN PUSTAKA' },
+        { id: 'bab3', title: 'BAB III METODOLOGI' },
+        { id: 'bab4', title: 'BAB IV HASIL & PEMBAHASAN' },
+        { id: 'bab5', title: 'BAB V KESIMPULAN & SARAN' },
+        { id: 'references', title: 'DAFTAR PUSTAKA' },
+        { id: 'appendix', title: 'LAMPIRAN' }
+      ];
+
+      items.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = `tree-btn ${item.isFront ? 'front-matter' : ''} ${item.id === currentManuscript.activeChapterId ? 'active' : ''}`;
+        btn.onclick = () => selectChapter(item.id, item.title);
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.title}</span>
+        `;
+        container.appendChild(btn);
+      });
+
+      document.getElementById('treeTotalCount').textContent = `${items.length} Bagian`;
+    }
+
+    function selectChapter(id, title) {
+      saveCurrentChapter();
+      currentManuscript.activeChapterId = id;
+
+      document.querySelectorAll('.tree-btn').forEach(b => b.classList.remove('active'));
+      event && event.currentTarget && event.currentTarget.classList.add('active');
+
+      if (id === 'cover') {
+        switchView('cover');
+      } else if (id === 'references') {
+        switchView('references');
+      } else {
+        switchView('editor');
+        loadCurrentChapter();
+      }
+
+      document.getElementById('heroActiveSectionLabel').textContent = `Menampilkan: ${title}`;
+    }
+
+    function loadCurrentChapter() {
+      const activeId = currentManuscript.activeChapterId;
+      const text = currentManuscript.chapters[activeId] || '';
+      document.getElementById('mainChapterEditor').value = text;
+      updateWordCount();
+    }
+
+    function saveCurrentChapter() {
+      const activeId = currentManuscript.activeChapterId;
+      const text = document.getElementById('mainChapterEditor').value;
+      currentManuscript.chapters[activeId] = text;
+
+      document.getElementById('editorSaveStatus').textContent = 'Tersimpan';
+      setTimeout(() => {
+        document.getElementById('editorSaveStatus').textContent = 'Tersimpan otomatis';
+      }, 1500);
+
+      updateWordCount();
+      saveToLocalStore();
+    }
+
+    function updateWordCount() {
+      const text = document.getElementById('mainChapterEditor').value.trim();
+      const count = text ? text.split(/\s+/).length : 0;
+      document.getElementById('statWordCount').textContent = `${count} Kata`;
+    }
+
+    // Switch View Antara Editor, Cover, Diagram, Referensi
+    function switchView(viewName) {
+      document.getElementById('viewEditorSection').style.display = viewName === 'editor' ? 'block' : 'none';
+      document.getElementById('viewCoverSection').style.display = viewName === 'cover' ? 'block' : 'none';
+      document.getElementById('viewDiagramSection').style.display = viewName === 'diagram' ? 'block' : 'none';
+      document.getElementById('viewReferencesSection').style.display = viewName === 'references' ? 'block' : 'none';
+    }
+
+    // Eksekusi Pembuatan Draf dengan AI Gemini Pro Anti AI-Slop
+    async function executeAiChapterGeneration() {
+      const activeId = currentManuscript.activeChapterId;
+      const btn = document.getElementById('btnRunAiGenerate');
+      btn.textContent = 'Menyusun Ilmiah...';
+      btn.disabled = true;
+
+      const payload = {
+        manuscriptType: currentManuscript.manuscriptType,
+        chapterId: activeId,
+        chapterTitle: activeId.toUpperCase(),
+        title: currentManuscript.title,
+        field: currentManuscript.programStudy,
+        problemStatement: document.getElementById('aiInputGap').value.trim(),
+        userReferences: document.getElementById('aiInputUserRef').value.trim(),
+        customTemplate: userConfig.campusTemplate,
+        apiKey: userConfig.apiKey
+      };
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const json = await res.json();
+        if (json.ok && json.data && json.data.content) {
+          document.getElementById('mainChapterEditor').value = json.data.content;
+          currentManuscript.chapters[activeId] = json.data.content;
+          saveCurrentChapter();
+          showToast(`Draf ilmiah berhasil disusun menggunakan ${json.data.modeUsed === 'gemini_pro' ? 'Gemini Pro' : 'Template Standar Ilmiah'}.`);
+        } else {
+          showToast(json.error ? json.error.message : 'Gagal menghasilkan draf.');
+        }
+      } catch (err) {
+        showToast('Koneksi server gagal, menggunakan draf cadangan.');
+      } finally {
+        btn.innerHTML = `<svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Susun Draf Bab Ini dengan AI`;
+        btn.disabled = false;
+      }
+    }
+
+    // Cover Page Generator & Upload Logo
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentManuscript.logoDataUrl = e.target.result;
+        document.getElementById('coverDisplayLogo').src = e.target.result;
+        showToast('Logo universitas berhasil dimuat ke sampul!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updateCoverDisplay() {
+      document.getElementById('coverDisplayTitle').textContent = currentManuscript.title.toUpperCase();
+      document.getElementById('coverDisplayAuthor').textContent = currentManuscript.authorName.toUpperCase();
+      document.getElementById('coverDisplayNIM').textContent = currentManuscript.authorIdNumber || '-';
+      document.getElementById('coverDisplayStudy').textContent = `PROGRAM STUDI ${currentManuscript.programStudy.toUpperCase()}`;
+      document.getElementById('coverDisplayFaculty').textContent = currentManuscript.faculty.toUpperCase();
+      document.getElementById('coverDisplayUniv').textContent = currentManuscript.university.toUpperCase();
+      document.getElementById('coverDisplayCity').textContent = (currentManuscript.city || 'KOTA').toUpperCase();
+      document.getElementById('coverDisplayYear').textContent = currentManuscript.year || '2026';
+
+      if (currentManuscript.logoDataUrl) {
+        document.getElementById('coverDisplayLogo').src = currentManuscript.logoDataUrl;
+      }
+
+      // Sidebar Info
+      document.getElementById('sidebarDocTitle').textContent = currentManuscript.title;
+      document.getElementById('sidebarDocType').textContent = currentManuscript.manuscriptType.toUpperCase();
+      document.getElementById('sidebarDocAuthor').textContent = `${currentManuscript.authorName} • ${currentManuscript.university}`;
+    }
+
+    function openEditCoverMetaModal() {
+      document.getElementById('inputCoverTitle').value = currentManuscript.title;
+      document.getElementById('inputCoverType').value = currentManuscript.manuscriptType;
+      document.getElementById('inputCoverAuthor').value = currentManuscript.authorName;
+      document.getElementById('inputCoverNIM').value = currentManuscript.authorIdNumber;
+      document.getElementById('inputCoverStudy').value = currentManuscript.programStudy;
+      document.getElementById('inputCoverFaculty').value = currentManuscript.faculty;
+      document.getElementById('inputCoverUniv').value = currentManuscript.university;
+      document.getElementById('inputCoverYear').value = `${currentManuscript.city}, ${currentManuscript.year}`;
+      openModal('modalEditCover');
+    }
+
+    function saveCoverMetadata() {
+      currentManuscript.title = document.getElementById('inputCoverTitle').value.trim();
+      currentManuscript.manuscriptType = document.getElementById('inputCoverType').value;
+      currentManuscript.authorName = document.getElementById('inputCoverAuthor').value.trim();
+      currentManuscript.authorIdNumber = document.getElementById('inputCoverNIM').value.trim();
+      currentManuscript.programStudy = document.getElementById('inputCoverStudy').value.trim();
+      currentManuscript.faculty = document.getElementById('inputCoverFaculty').value.trim();
+      currentManuscript.university = document.getElementById('inputCoverUniv').value.trim();
+
+      const cityYear = document.getElementById('inputCoverYear').value.split(',');
+      currentManuscript.city = (cityYear[0] || 'DEPOK').trim();
+      currentManuscript.year = (cityYear[1] || '2026').trim();
+
+      updateCoverDisplay();
+      closeModal('modalEditCover');
+      saveToLocalStore();
+      showToast('Informasi halaman sampul berhasil diperbarui.');
+    }
+
+    // Mesin Sitasi & Daftar Pustaka
+    function renderBibliography() {
+      const style = userConfig.citationStyle || 'apa';
+      const refs = currentManuscript.references || [];
+
+      document.getElementById('statRefLinked').textContent = `${refs.length} Jurnal Bereputasi`;
+
+      const sorted = [...refs].sort((a,b) => (a.author || '').localeCompare(b.author || ''));
+      const textLines = sorted.map(ref => {
+        const author = ref.author || 'Anonim';
+        const year = ref.year || '2023';
+        const title = ref.title || 'Judul Artikel';
+        const journal = ref.journal || 'Jurnal Ilmiah';
+        const vol = ref.volume ? ` ${ref.volume}` : '';
+        const issue = ref.issue ? `(${ref.issue})` : '';
+        const pages = ref.pages ? `, ${ref.pages}` : '';
+        const doi = ref.doi ? ` https://doi.org/${ref.doi}` : '';
+
+        if (style === 'ieee') {
+          return `${author}, "${title}," ${journal}, vol.${vol || '1'}, no.${issue || '1'}${pages}, ${year}.${doi}`;
+        }
+        return `${author}. (${year}). ${title}. ${journal},${vol}${issue}${pages}.${doi}`;
+      });
+
+      document.getElementById('bibliographyOutputArea').value = textLines.join('\n\n');
+      currentManuscript.chapters.references = textLines.join('\n\n');
+    }
+
+    function updateCitationStyle() {
+      userConfig.citationStyle = document.getElementById('selectCitationStyle').value;
+      document.getElementById('statCitationStyle').textContent = userConfig.citationStyle.toUpperCase();
+      renderBibliography();
+      showToast(`Format sitasi diubah ke ${userConfig.citationStyle.toUpperCase()}.`);
+    }
+
+    function openAddReferenceModal() {
+      openModal('modalAddReference');
+    }
+
+    function saveNewReference() {
+      const author = document.getElementById('inputRefAuthor').value.trim();
+      const year = document.getElementById('inputRefYear').value.trim();
+      const title = document.getElementById('inputRefTitle').value.trim();
+      const journal = document.getElementById('inputRefJournal').value.trim();
+      const vol = document.getElementById('inputRefVol').value.trim();
+      const doi = document.getElementById('inputRefDoi').value.trim();
+
+      if (!author || !title) {
+        showToast('Nama penulis dan judul wajib diisi!');
+        return;
+      }
+
+      currentManuscript.references.push({
+        id: `ref_${Date.now()}`,
+        author,
+        year,
+        title,
+        journal,
+        volume: vol,
+        doi
+      });
+
+      renderBibliography();
+      closeModal('modalAddReference');
+      saveToLocalStore();
+      showToast('Referensi baru ditambahkan ke Daftar Pustaka.');
+    }
+
+    function copyBibliographyText() {
+      const text = document.getElementById('bibliographyOutputArea').value;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Daftar Pustaka disalin ke clipboard!');
+      });
+    }
+
+    // Generator Peta Konsep & PRISMA Diagram (SVG)
+    function renderDiagramType(type) {
+      const canvas = document.getElementById('diagramDisplayCanvas');
+      if (type === 'prisma') {
+        canvas.innerHTML = `
+          <div style="text-align:center; margin-bottom:12px; font-weight:800; font-size:0.95rem;">
+            DIAGRAM ALUR PRISMA 2020 (SYSTEMATIC LITERATURE REVIEW)
+          </div>
+          <svg viewBox="0 0 800 480" width="100%" height="380" style="background:#f8fafc; border-radius:8px;">
+            <rect x="50" y="30" width="300" height="60" rx="8" fill="#1e293b" />
+            <text x="200" y="55" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">IDENTIFIKASI (Identification)</text>
+            <text x="200" y="72" fill="#ffffff" font-size="10" text-anchor="middle">Catatan teridentifikasi dari database (n = 428)</text>
+
+            <line x1="200" y1="90" x2="200" y2="130" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)" />
+
+            <rect x="50" y="130" width="300" height="60" rx="8" fill="#1e293b" />
+            <text x="200" y="155" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">PENYARINGAN (Screening)</text>
+            <text x="200" y="172" fill="#ffffff" font-size="10" text-anchor="middle">Artikel setelah duplikasi dihapus (n = 284)</text>
+
+            <rect x="440" y="130" width="300" height="60" rx="8" fill="#fef2f2" stroke="#fca5a5" />
+            <text x="590" y="155" fill="#991b1b" font-size="11" font-weight="bold" text-anchor="middle">REKOR DIEKSKLUSI</text>
+            <text x="590" y="172" fill="#7f1d1d" font-size="10" text-anchor="middle">Tidak sesuai kriteria inklusi (n = 196)</text>
+            <line x1="350" y1="160" x2="440" y2="160" stroke="#ef4444" stroke-width="2" />
+
+            <line x1="200" y1="190" x2="200" y2="230" stroke="#0f172a" stroke-width="2" />
+
+            <rect x="50" y="230" width="300" height="60" rx="8" fill="#1e293b" />
+            <text x="200" y="255" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">KELAYAKAN (Eligibility)</text>
+            <text x="200" y="272" fill="#ffffff" font-size="10" text-anchor="middle">Artikel teks lengkap dinilai (n = 88)</text>
+
+            <line x1="200" y1="290" x2="200" y2="330" stroke="#0f172a" stroke-width="2" />
+
+            <rect x="50" y="330" width="300" height="60" rx="8" fill="#047857" />
+            <text x="200" y="355" fill="#a7f3d0" font-size="11" font-weight="bold" text-anchor="middle">TERMASUK (Included)</text>
+            <text x="200" y="372" fill="#ffffff" font-size="10" text-anchor="middle">Studi final disintesis dalam review (n = 34)</text>
+          </svg>
+        `;
+      } else {
+        canvas.innerHTML = `
+          <div style="text-align:center; margin-bottom:12px; font-weight:800; font-size:0.95rem;">
+            KERANGKA KONSEPTUAL PENELITIAN (VARIABLE RELATIONSHIPS)
+          </div>
+          <svg viewBox="0 0 800 360" width="100%" height="320" style="background:#f8fafc; border-radius:8px;">
+            <rect x="60" y="120" width="220" height="90" rx="10" fill="#1e293b" />
+            <text x="170" y="155" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">VARIABEL INDEPENDEN (X)</text>
+            <text x="170" y="175" fill="#ffffff" font-size="10" text-anchor="middle">&bull; Algoritma ML Teroptimasi</text>
+            <text x="170" y="190" fill="#ffffff" font-size="10" text-anchor="middle">&bull; Karakteristik Data Mahasiswa</text>
+
+            <line x1="280" y1="165" x2="480" y2="165" stroke="#0284c7" stroke-width="3" stroke-dasharray="4 2" />
+            <text x="380" y="150" fill="#0369a1" font-size="10" font-weight="bold" text-anchor="middle">Hipotesis (H1)</text>
+
+            <rect x="480" y="120" width="240" height="90" rx="10" fill="#0f172a" stroke="#00f0ff" stroke-width="2" />
+            <text x="600" y="155" fill="#00f0ff" font-size="12" font-weight="bold" text-anchor="middle">VARIABEL DEPENDEN (Y)</text>
+            <text x="600" y="175" fill="#ffffff" font-size="10" text-anchor="middle">&bull; Akurasi Deteksi Dini Risiko</text>
+            <text x="600" y="190" fill="#ffffff" font-size="10" text-anchor="middle">&bull; Pengurangan False Positive</text>
+          </svg>
+        `;
+      }
+    }
+
+    // Modal Control
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    function openSettingsModal() {
+      document.getElementById('inputUserGeminiKey').value = userConfig.apiKey || '';
+      document.getElementById('inputCampusTemplate').value = userConfig.campusTemplate || '';
+      openModal('modalSettings');
+    }
+
+    function saveSettings() {
+      userConfig.apiKey = document.getElementById('inputUserGeminiKey').value.trim();
+      userConfig.campusTemplate = document.getElementById('inputCampusTemplate').value.trim();
+      saveConfig();
+      closeModal('modalSettings');
+      showToast('Kunci API & template kampus berhasil disimpan.');
+    }
+
+    function openPricingModal() { openModal('modalPricing'); }
+
+    function activateTier(tierName) {
+      userConfig.tier = tierName;
+      const badge = document.getElementById('displayActiveTier');
+      if (tierName === 'pro') {
+        badge.className = 'tier-badge pro';
+        badge.innerHTML = '★ Academic Pro (Gemini Kuota Penuh)';
+        showToast('Paket Academic Pro Aktif! Seluruh kuota server Gemini Pro siap digunakan.');
+      } else {
+        badge.className = 'tier-badge';
+        badge.innerHTML = 'Gratis (Gemini Anda)';
+        showToast('Beralih ke Paket Student Gratis.');
+      }
+      closeModal('modalPricing');
+      saveConfig();
+    }
+
+    // Local Storage Persist
+    function saveToLocalStore() {
+      try {
+        localStorage.setItem('docuresearch_manuscript', JSON.stringify(currentManuscript));
+      } catch (e) {}
+    }
+
+    function saveConfig() {
+      try {
+        localStorage.setItem('docuresearch_config', JSON.stringify(userConfig));
+      } catch (e) {}
+    }
+
+    function loadConfig() {
+      try {
+        const saved = localStorage.getItem('docuresearch_config');
+        if (saved) userConfig = { ...userConfig, ...JSON.parse(saved) };
+        const savedDoc = localStorage.getItem('docuresearch_manuscript');
+        if (savedDoc) currentManuscript = { ...currentManuscript, ...JSON.parse(savedDoc) };
+      } catch (e) {}
+    }
+
+    function exportFullDocumentWord() {
+      const fullText = `
+${currentManuscript.title.toUpperCase()}
+Oleh: ${currentManuscript.authorName} (${currentManuscript.authorIdNumber})
+${currentManuscript.programStudy}, ${currentManuscript.university}
+============================================================
+
+${currentManuscript.chapters.abstract_id || ''}
+
+${currentManuscript.chapters.bab1 || ''}
+
+${currentManuscript.chapters.bab2 || ''}
+
+${currentManuscript.chapters.bab3 || ''}
+
+${currentManuscript.chapters.bab4 || ''}
+
+${currentManuscript.chapters.bab5 || ''}
+
+============================================================
+DAFTAR PUSTAKA
+${currentManuscript.chapters.references || ''}
+      `.trim();
+
+      const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Naskah_${currentManuscript.manuscriptType}_${currentManuscript.authorName.replace(/\s+/g, '_')}.doc`;
+      a.click();
+      showToast('Naskah akademik berhasil diunduh dalam format naskah lengkap!');
+    }
+
+    function showToast(msg) {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    async function checkApiHealth() {
+      try {
+        const res = await fetch('/api/health');
+        const json = await res.json();
+        if (json.ok && json.aiEngine.serverKeyConfigured) {
+          document.getElementById('aiCurrentModeText').textContent = 'Gemini Pro Server Aktif';
+        }
+      } catch (e) {}
+    }
+  </script>
+</body>
+</html>
